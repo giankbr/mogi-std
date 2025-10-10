@@ -1,0 +1,21 @@
+{
+  "name": "Mogi Studio - Bold Design Agency",
+  "short_name": "Mogi Studio",
+  "description": "Bold design and brand identity agency crafting high-impact brands and websites that refuse to blend in.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e88c5c",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
