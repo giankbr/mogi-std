@@ -103,6 +103,11 @@ const translations = {
       learnMore: 'Learn more',
       bookCall: 'Book a call',
     },
+    work: {
+      title: 'Selected work',
+      startProject: 'Start a project',
+      view: 'View',
+    },
     faq: {
       title: 'Frequently asked',
       q1: 'What does a typical project look like?',
@@ -211,6 +216,11 @@ const translations = {
       service3Body: 'Arahan seni, motion, dan konten yang menghidupkan cerita di berbagai layar dan channel.',
       learnMore: 'Pelajari lebih lanjut',
       bookCall: 'Jadwalkan panggilan',
+    },
+    work: {
+      title: 'Karya pilihan',
+      startProject: 'Mulai proyek',
+      view: 'Lihat',
     },
     faq: {
       title: 'Pertanyaan umum',

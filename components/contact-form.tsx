@@ -55,7 +55,6 @@ export function ContactForm({ className }: { className?: string }) {
     setIsSubmitting(true);
 
     try {
-      // TODO: Replace with actual API endpoint
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {

@@ -11,6 +11,7 @@ import { ServicesAccordion } from '@/components/services-accordion';
 import { SocialLinks } from '@/components/social-links';
 import { StatsRow } from '@/components/stats-row';
 import { Testimonials } from '@/components/testimonials';
+import { WorkGrid } from '@/components/work-grid';
 import { useLanguage } from '@/lib/language-context';
 
 export default function Page() {
@@ -92,9 +93,9 @@ export default function Page() {
         <TeamSection />
       </MotionSection> */}
 
-      {/* <MotionSection delay={0.3}>
+      <MotionSection delay={0.3}>
         <WorkGrid />
-      </MotionSection> */}
+      </MotionSection>
 
       <MotionSection delay={0.35}>
         <Testimonials className="py-4 md:py-6" />

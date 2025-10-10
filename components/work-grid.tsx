@@ -1,5 +1,8 @@
+'use client';
+
 import Image from "next/image"
 import { cn } from "@/lib/utils"
+import { useLanguage } from '@/lib/language-context';
 
 const projects = [
   { title: "Reimagine Wellness", tag: "Brand + Web" },
@@ -11,14 +14,16 @@ const projects = [
 ]
 
 export function WorkGrid({ className }: { className?: string }) {
+  const { t } = useLanguage();
+  
   return (
-    <section id="work" className={cn("mx-auto max-w-6xl px-4 py-8 md:py-12", className)} aria-labelledby="work-title">
-      <div className="mb-5 md:mb-6 flex items-end justify-between">
+    <section id="work" className={cn("mx-auto max-w-6xl px-4", className)} aria-labelledby="work-title">
+      <div className="mb-6 md:mb-8 flex items-end justify-between">
         <h2 id="work-title" className="font-serif text-2xl md:text-3xl font-semibold tracking-tight">
-          Selected work
+          {t('work.title')}
         </h2>
         <a href="#contact" className="text-sm underline">
-          Start a project
+          {t('work.startProject')}
         </a>
       </div>
 
@@ -38,7 +43,7 @@ export function WorkGrid({ className }: { className?: string }) {
                 <p className="text-xs text-muted-foreground">{p.tag}</p>
               </div>
               <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
-                View
+                {t('work.view')}
               </span>
             </figcaption>
           </figure>
