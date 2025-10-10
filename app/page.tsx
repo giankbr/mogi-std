@@ -63,11 +63,11 @@ export default function Page() {
       </MotionSection>
 
       <MotionSection delay={0.35}>
-        <FAQ className="pt-4 md:pt-6" />
+        <FAQ className="pb-4 md:pb-6" />
       </MotionSection>
 
       <MotionSection delay={0.4}>
-        <CtaBanner />
+        <CtaBanner className="pb-4 md:pb-6" />
       </MotionSection>
 
       <footer className="mt-6 border-t">

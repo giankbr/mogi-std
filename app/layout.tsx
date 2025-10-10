@@ -1,41 +1,35 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Urbanist } from "next/font/google"
-import { Sora } from "next/font/google"
-import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
-import { Suspense } from "react"
-import "./globals.css"
+import { Analytics } from '@vercel/analytics/next';
+import { GeistMono } from 'geist/font/mono';
+import type { Metadata } from 'next';
+import { Sora, Urbanist } from 'next/font/google';
+import type React from 'react';
+import { Suspense } from 'react';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "mogi studio — bold design",
-  description: "We craft high-impact brands and websites.",
-  generator: "v0.app",
-}
+  title: 'Mogi Studio — bold design',
+  description: 'We craft high-impact brands and websites.',
+};
 
 const urbanist = Urbanist({
-  subsets: ["latin"],
-  variable: "--font-urbanist",
-  display: "swap",
-})
+  subsets: ['latin'],
+  variable: '--font-urbanist',
+  display: 'swap',
+});
 
 const sora = Sora({
-  subsets: ["latin"],
-  variable: "--font-sora",
-  display: "swap",
-})
+  subsets: ['latin'],
+  variable: '--font-sora',
+  display: 'swap',
+});
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${urbanist.variable} ${sora.variable} ${GeistMono.variable} antialiased`}
-    >
+    <html lang="en" suppressHydrationWarning className={`${urbanist.variable} ${sora.variable} ${GeistMono.variable} antialiased`}>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -50,5 +44,5 @@ export default function RootLayout({
         </Suspense>
       </body>
     </html>
-  )
+  );
 }
