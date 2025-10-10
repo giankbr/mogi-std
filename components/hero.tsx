@@ -7,7 +7,14 @@ export function Hero({ className }: { className?: string }) {
       <div className="mx-auto max-w-6xl px-4 pt-4 pb-6">
         <div className="rounded-xl overflow-hidden border bg-card">
           <div className="relative">
-            <Image src="/images/hero-reference.jpg" alt="Desk setup with speakers and headphones" width={1600} height={900} className="h-[280px] sm:h-[350px] md:h-[380px] w-full object-cover" priority />
+            <Image
+              src="/images/hero-reference.jpg"
+              alt="Desk setup with speakers and headphones"
+              width={1600}
+              height={900}
+              className="h-[280px] sm:h-[350px] md:h-[380px] w-full object-cover"
+              priority
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
             <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-between">
               <div className="flex items-center justify-between text-sm text-white/80">
