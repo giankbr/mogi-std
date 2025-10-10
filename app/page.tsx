@@ -99,12 +99,25 @@ export default function Page() {
         <FAQ className="pb-4 md:pb-6" />
       </MotionSection>
 
-      <MotionSection delay={0.45}>
+      {/* <MotionSection delay={0.45}>
+        <Newsletter />
+      </MotionSection> */}
+
+      <MotionSection delay={0.5}>
         <ContactForm />
       </MotionSection>
 
       <footer className="mt-6 border-t">
         <div className="mx-auto max-w-6xl px-4 py-8">
+          {/* Newsletter Section in Footer */}
+          {/* <div className="mb-8 pb-8 border-b">
+            <div className="max-w-md">
+              <h3 className="text-sm font-semibold mb-2">Subscribe to our newsletter</h3>
+              <p className="text-xs text-muted-foreground mb-4">Monthly insights and design inspiration.</p>
+              <Newsletter variant="minimal" />
+            </div>
+          </div> */}
+
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <p className="text-sm text-foreground">© {new Date().getFullYear()} Mogi Studio</p>
