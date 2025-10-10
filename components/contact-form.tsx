@@ -72,7 +72,7 @@ export function ContactForm({ className }: { className?: string }) {
 
   return (
     <section id="contact" className={cn('mx-auto max-w-6xl px-4 py-4 md:py-6', className)} aria-labelledby="contact-title">
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-8 md:grid-cols-2">
         {/* Left Column - Info */}
         <div>
           <h2 id="contact-title" className="font-serif text-3xl md:text-4xl font-bold tracking-tight">
