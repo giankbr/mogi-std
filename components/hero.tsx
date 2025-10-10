@@ -4,7 +4,7 @@ import Image from 'next/image';
 export function Hero({ className }: { className?: string }) {
   return (
     <section className={cn('relative', className)} aria-labelledby="hero-title">
-      <div className="mx-auto max-w-6xl px-4 pt-4 pb-6">
+      <div className="mx-auto max-w-6xl px-4 pt-3 md:pt-4 pb-4 md:pb-5">
         <div className="rounded-xl overflow-hidden border bg-card">
           <div className="relative">
             <Image
