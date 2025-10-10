@@ -48,10 +48,10 @@ export default function Page() {
       </MotionSection>
 
       <MotionSection delay={0.05}>
-        <ClientsRow className="py-3 md:py-4" />
+        <ClientsRow className="py-4 md:py-6" />
       </MotionSection>
 
-      <section id="about" className="mx-auto max-w-6xl px-4 py-3 md:py-4">
+      <section id="about" className="mx-auto max-w-6xl px-4 py-4 md:py-6">
         <div className="grid gap-6 md:grid-cols-3">
           <div className="rounded-xl border bg-card p-6">
             <p className="text-sm text-muted-foreground">BY THE NUMBERS</p>
@@ -72,15 +72,15 @@ export default function Page() {
       </section>
 
       <MotionSection delay={0.1}>
-        <StatsRow className="pt-0 md:pt-0 pb-3 md:pb-4" />
+        <StatsRow className="pt-0 md:pt-0 pb-4 md:pb-6" />
       </MotionSection>
 
       <MotionSection delay={0.15}>
-        <FeatureCards className="py-3 md:py-4" />
+        <FeatureCards className="py-4 md:py-6" />
       </MotionSection>
 
       <MotionSection delay={0.2}>
-        <ServicesAccordion className="py-3 md:py-4" />
+        <ServicesAccordion className="py-4 md:py-6" />
       </MotionSection>
 
       {/* <MotionSection delay={0.25}>
@@ -92,11 +92,11 @@ export default function Page() {
       </MotionSection> */}
 
       <MotionSection delay={0.35}>
-        <Testimonials className="py-3 md:py-4" />
+        <Testimonials className="py-4 md:py-6" />
       </MotionSection>
 
       <MotionSection delay={0.4}>
-        <FAQ className="py-3 md:py-4" />
+        <FAQ className="py-4 md:py-6" />
       </MotionSection>
 
       {/* <MotionSection delay={0.45}>
@@ -104,11 +104,11 @@ export default function Page() {
       </MotionSection> */}
 
       <MotionSection delay={0.5}>
-        <ContactForm className="py-3 md:py-4" />
+        <ContactForm className="py-4 md:py-6" />
       </MotionSection>
 
-      <footer className="mt-3 md:mt-4 border-t">
-        <div className="mx-auto max-w-6xl px-4 py-6 md:py-8">
+      <footer className="mt-4 md:mt-6 border-t">
+        <div className="mx-auto max-w-6xl px-4 py-8">
           {/* Newsletter Section in Footer */}
           {/* <div className="mb-8 pb-8 border-b">
             <div className="max-w-md">
