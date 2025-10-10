@@ -1,5 +1,6 @@
 'use client';
 
+import { useLanguage } from '@/lib/language-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
@@ -12,11 +13,8 @@ type FormData = {
   message: string;
 };
 
-const projectTypes = ['Brand Identity', 'Web Design & Development', 'Motion & Visual Art', 'Full Package', 'Other'];
-
-const budgets = ['Under $10k', '$10k - $25k', '$25k - $50k', '$50k - $100k', '$100k+', 'Not sure yet'];
-
 export function ContactForm({ className }: { className?: string }) {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -27,6 +25,23 @@ export function ContactForm({ className }: { className?: string }) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const projectTypes = [
+    t('contact.projectTypes.brandIdentity'),
+    t('contact.projectTypes.webDesign'),
+    t('contact.projectTypes.motion'),
+    t('contact.projectTypes.fullPackage'),
+    t('contact.projectTypes.other'),
+  ];
+
+  const budgets = [
+    t('contact.budgets.under10k'),
+    t('contact.budgets.range10k25k'),
+    t('contact.budgets.range25k50k'),
+    t('contact.budgets.range50k100k'),
+    t('contact.budgets.over100k'),
+    t('contact.budgets.notSure'),
+  ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData((prev) => ({
@@ -76,35 +91,35 @@ export function ContactForm({ className }: { className?: string }) {
         {/* Left Column - Info */}
         <div>
           <h2 id="contact-title" className="font-serif text-3xl md:text-4xl font-bold tracking-tight">
-            Let's create something <span className="text-accent">bold together.</span>
+            {t('contact.title')} <span className="text-accent">{t('contact.titleAccent')}</span>
           </h2>
-          <p className="mt-4 text-base text-muted-foreground leading-relaxed">Ready to make your brand impossible to ignore? Drop us a message and we'll get back to you within 24 hours.</p>
+          <p className="mt-4 text-base text-muted-foreground leading-relaxed">{t('contact.subtitle')}</p>
 
           <div className="mt-8 space-y-6">
             <div>
-              <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3">Contact Info</h3>
+              <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3">{t('contact.contactInfoTitle')}</h3>
               <div className="space-y-3">
-                <a href="mailto:hello@mogistudio.com" className="block text-foreground hover:text-accent transition-colors">
-                  hello@mogistudio.com
+                <a href={`mailto:${t('contact.email')}`} className="block text-foreground hover:text-accent transition-colors">
+                  {t('contact.email')}
                 </a>
-                <p className="text-muted-foreground">Available Mon-Fri, 9AM-6PM EST</p>
+                <p className="text-muted-foreground">{t('contact.availability')}</p>
               </div>
             </div>
 
             <div>
-              <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3">What to Expect</h3>
+              <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3">{t('contact.expectTitle')}</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="text-accent mt-1">✓</span>
-                  <span>Response within 24 hours</span>
+                  <span>{t('contact.expect1')}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-accent mt-1">✓</span>
-                  <span>Free consultation call</span>
+                  <span>{t('contact.expect2')}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-accent mt-1">✓</span>
-                  <span>Custom proposal tailored to your needs</span>
+                  <span>{t('contact.expect3')}</span>
                 </li>
               </ul>
             </div>
@@ -117,7 +132,7 @@ export function ContactForm({ className }: { className?: string }) {
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-2">
-                  Your Name *
+                  {t('contact.yourName')} *
                 </label>
                 <input
                   type="text"
@@ -127,13 +142,13 @@ export function ContactForm({ className }: { className?: string }) {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full rounded-lg border bg-background px-4 py-2.5 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors"
-                  placeholder="John Doe"
+                  placeholder={t('contact.namePlaceholder')}
                 />
               </div>
 
               <div>
                 <label htmlFor="email" className="block text-sm font-medium mb-2">
-                  Email Address *
+                  {t('contact.emailAddress')} *
                 </label>
                 <input
                   type="email"
@@ -143,14 +158,14 @@ export function ContactForm({ className }: { className?: string }) {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full rounded-lg border bg-background px-4 py-2.5 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors"
-                  placeholder="john@company.com"
+                  placeholder={t('contact.emailPlaceholder')}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="company" className="block text-sm font-medium mb-2">
-                Company
+                {t('contact.company')}
               </label>
               <input
                 type="text"
@@ -159,14 +174,14 @@ export function ContactForm({ className }: { className?: string }) {
                 value={formData.company}
                 onChange={handleChange}
                 className="w-full rounded-lg border bg-background px-4 py-2.5 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors"
-                placeholder="Your Company Inc."
+                placeholder={t('contact.companyPlaceholder')}
               />
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
                 <label htmlFor="projectType" className="block text-sm font-medium mb-2">
-                  Project Type *
+                  {t('contact.projectType')} *
                 </label>
                 <select
                   id="projectType"
@@ -176,7 +191,7 @@ export function ContactForm({ className }: { className?: string }) {
                   onChange={handleChange}
                   className="w-full rounded-lg border bg-background px-4 py-2.5 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors"
                 >
-                  <option value="">Select type</option>
+                  <option value="">{t('contact.selectType')}</option>
                   {projectTypes.map((type) => (
                     <option key={type} value={type}>
                       {type}
@@ -187,7 +202,7 @@ export function ContactForm({ className }: { className?: string }) {
 
               <div>
                 <label htmlFor="budget" className="block text-sm font-medium mb-2">
-                  Budget Range
+                  {t('contact.budgetRange')}
                 </label>
                 <select
                   id="budget"
@@ -196,7 +211,7 @@ export function ContactForm({ className }: { className?: string }) {
                   onChange={handleChange}
                   className="w-full rounded-lg border bg-background px-4 py-2.5 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors"
                 >
-                  <option value="">Select budget</option>
+                  <option value="">{t('contact.selectBudget')}</option>
                   {budgets.map((budget) => (
                     <option key={budget} value={budget}>
                       {budget}
@@ -208,7 +223,7 @@ export function ContactForm({ className }: { className?: string }) {
 
             <div>
               <label htmlFor="message" className="block text-sm font-medium mb-2">
-                Project Details *
+                {t('contact.projectDetails')} *
               </label>
               <textarea
                 id="message"
@@ -218,25 +233,23 @@ export function ContactForm({ className }: { className?: string }) {
                 value={formData.message}
                 onChange={handleChange}
                 className="w-full rounded-lg border bg-background px-4 py-2.5 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors resize-none"
-                placeholder="Tell us about your project, goals, and timeline..."
+                placeholder={t('contact.messagePlaceholder')}
               />
             </div>
 
-            {submitStatus === 'success' && <div className="rounded-lg bg-accent/10 border border-accent/20 p-4 text-sm text-accent">✓ Thank you! We'll get back to you within 24 hours.</div>}
+            {submitStatus === 'success' && <div className="rounded-lg bg-accent/10 border border-accent/20 p-4 text-sm text-accent">{t('contact.successMessage')}</div>}
 
-            {submitStatus === 'error' && (
-              <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-500">✗ Something went wrong. Please try again or email us directly.</div>
-            )}
+            {submitStatus === 'error' && <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-500">{t('contact.errorMessage')}</div>}
 
             <button
               type="submit"
               disabled={isSubmitting}
               className="w-full rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isSubmitting ? 'Sending...' : 'Send Message'}
+              {isSubmitting ? t('contact.sending') : t('contact.sendMessage')}
             </button>
 
-            <p className="text-xs text-center text-muted-foreground">By submitting this form, you agree to our Privacy Policy.</p>
+            <p className="text-xs text-center text-muted-foreground">{t('contact.privacyPolicy')}</p>
           </form>
         </div>
       </div>

@@ -1,12 +1,15 @@
 'use client';
 
+import { LanguageToggle } from '@/components/language-toggle';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { useLanguage } from '@/lib/language-context';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export function Navbar({ className }: { className?: string }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   // Prevent scroll when menu is open
   useEffect(() => {
@@ -21,10 +24,10 @@ export function Navbar({ className }: { className?: string }) {
   }, [mobileMenuOpen]);
 
   const menuItems = [
-    { href: '#work', label: 'Work', number: '01' },
-    { href: '#services', label: 'Services', number: '02' },
-    { href: '#about', label: 'About', number: '03' },
-    { href: '#contact', label: 'Contact', number: '04' },
+    { href: '#work', label: t('nav.work'), number: '01' },
+    { href: '#services', label: t('nav.services'), number: '02' },
+    { href: '#about', label: t('nav.about'), number: '03' },
+    { href: '#contact', label: t('nav.contact'), number: '04' },
   ];
 
   return (
@@ -44,25 +47,28 @@ export function Navbar({ className }: { className?: string }) {
             <ul className="flex items-center gap-4 text-sm">
               <li>
                 <Link href="#work" className="hover:underline">
-                  Work
+                  {t('nav.work')}
                 </Link>
               </li>
               <li>
                 <Link href="#services" className="hover:underline">
-                  Services
+                  {t('nav.services')}
                 </Link>
               </li>
               <li>
                 <Link href="#about" className="hover:underline">
-                  About
+                  {t('nav.about')}
                 </Link>
+              </li>
+              <li>
+                <LanguageToggle />
               </li>
               <li>
                 <ThemeToggle />
               </li>
               <li>
                 <Link href="#contact" className="inline-flex items-center rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground">
-                  Get in touch
+                  {t('nav.getInTouch')}
                 </Link>
               </li>
             </ul>
@@ -70,6 +76,7 @@ export function Navbar({ className }: { className?: string }) {
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 md:hidden">
+            <LanguageToggle />
             <ThemeToggle />
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="relative z-50 p-2 hover:text-accent transition-colors" aria-label="Toggle menu">
               <div className="relative w-6 h-6">
@@ -128,7 +135,7 @@ export function Navbar({ className }: { className?: string }) {
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center justify-center gap-2 w-full rounded-full bg-accent px-6 py-4 text-base font-medium text-accent-foreground hover:bg-accent/90 transition-colors"
               >
-                Start a project
+                {t('nav.startProject')}
                 <span>→</span>
               </Link>
             </div>

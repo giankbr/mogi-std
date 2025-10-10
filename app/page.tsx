@@ -1,3 +1,5 @@
+'use client';
+
 import { ClientsRow } from '@/components/clients-row';
 import { ContactForm } from '@/components/contact-form';
 import { FAQ } from '@/components/faq';
@@ -9,8 +11,10 @@ import { ServicesAccordion } from '@/components/services-accordion';
 import { SocialLinks } from '@/components/social-links';
 import { StatsRow } from '@/components/stats-row';
 import { Testimonials } from '@/components/testimonials';
+import { useLanguage } from '@/lib/language-context';
 
 export default function Page() {
+  const { t } = useLanguage();
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -54,17 +58,18 @@ export default function Page() {
       <section id="about" className="mx-auto max-w-6xl px-4 py-4 md:py-6">
         <div className="grid gap-6 md:grid-cols-3">
           <div className="rounded-xl border bg-card p-6">
-            <p className="text-sm text-muted-foreground">BY THE NUMBERS</p>
+            <p className="text-sm text-muted-foreground">{t('about.byNumbers')}</p>
             <p className="mt-3 text-3xl font-semibold tracking-tight">
-              $128k<span className="text-accent">+</span>
+              {t('about.raisedAmount')}
+              <span className="text-accent">+</span>
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">raised by clients after collaboration</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t('about.raisedText')}</p>
           </div>
           <div className="rounded-xl border bg-card p-6 md:col-span-2">
-            <h2 className="font-serif text-balance text-2xl font-semibold tracking-tight md:text-3xl">We exist for brands who speak louder, stand taller, and never apologize for taking up space.</h2>
+            <h2 className="font-serif text-balance text-2xl font-semibold tracking-tight md:text-3xl">{t('about.mission')}</h2>
             <div className="mt-4">
               <a href="#services" className="inline-flex rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground">
-                More about us
+                {t('about.moreAbout')}
               </a>
             </div>
           </div>
@@ -120,25 +125,27 @@ export default function Page() {
 
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-              <p className="text-sm text-foreground">© {new Date().getFullYear()} Mogi Studio</p>
-              <p className="mt-1 text-xs text-muted-foreground">Building brands that refuse to blend in.</p>
+              <p className="text-sm text-foreground">
+                © {new Date().getFullYear()} {t('footer.copyright')}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{t('footer.tagline')}</p>
             </div>
 
             <nav aria-label="Footer" className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start sm:items-center">
               <ul className="flex items-center gap-6 text-sm">
                 <li>
                   <a href="#work" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Work
+                    {t('footer.work')}
                   </a>
                 </li>
                 <li>
                   <a href="#services" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Services
+                    {t('footer.services')}
                   </a>
                 </li>
                 <li>
                   <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Contact
+                    {t('footer.contact')}
                   </a>
                 </li>
               </ul>

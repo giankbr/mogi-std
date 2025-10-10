@@ -1,3 +1,4 @@
+import { LanguageProvider } from '@/lib/language-context';
 import { Analytics } from '@vercel/analytics/next';
 import { GeistMono } from 'geist/font/mono';
 import type { Metadata } from 'next';
@@ -91,10 +92,12 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans">
-        <Suspense fallback={null}>
-          {children}
-          <Analytics />
-        </Suspense>
+        <LanguageProvider>
+          <Suspense fallback={null}>
+            {children}
+            <Analytics />
+          </Suspense>
+        </LanguageProvider>
       </body>
     </html>
   );

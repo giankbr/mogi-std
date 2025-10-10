@@ -1,16 +1,21 @@
+'use client';
+
+import { useLanguage } from '@/lib/language-context';
 import { cn } from '@/lib/utils';
 
-const stats = [
-  { k: '12+', v: 'Years crafting brands' },
-  { k: '120+', v: 'Companies launched' },
-  { k: '$30M', v: 'Client revenue influenced' },
-];
-
 export function StatsRow({ className }: { className?: string }) {
+  const { t } = useLanguage();
+
+  const stats = [
+    { k: t('stats.stat1Key'), v: t('stats.stat1Value') },
+    { k: t('stats.stat2Key'), v: t('stats.stat2Value') },
+    { k: t('stats.stat3Key'), v: t('stats.stat3Value') },
+  ];
+
   return (
     <section aria-labelledby="stats-title" className={cn('mx-auto max-w-6xl px-4 py-4 md:py-6', className)}>
       <h2 id="stats-title" className="sr-only">
-        By the numbers
+        {t('stats.title')}
       </h2>
       <div className="grid gap-4 md:grid-cols-3">
         {stats.map((s) => (
