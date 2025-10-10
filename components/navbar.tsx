@@ -1,17 +1,15 @@
-"use client"
+'use client';
 
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeToggle } from '@/components/theme-toggle';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 export function Navbar({ className }: { className?: string }) {
   return (
-    <header
-      className={cn("sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-background/70 border-b", className)}
-    >
+    <header className={cn('sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-background/70 border-b', className)}>
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <Link href="/" className="font-semibold tracking-tight text-lg">
-          mogi studio
+          Mogi Studio
           <span aria-hidden="true" className="text-accent">
             ®
           </span>
@@ -38,10 +36,7 @@ export function Navbar({ className }: { className?: string }) {
               <ThemeToggle />
             </li>
             <li>
-              <Link
-                href="#contact"
-                className="inline-flex items-center rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground"
-              >
+              <Link href="#contact" className="inline-flex items-center rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground">
                 Get in touch
               </Link>
             </li>
@@ -49,5 +44,5 @@ export function Navbar({ className }: { className?: string }) {
         </nav>
       </div>
     </header>
-  )
+  );
 }

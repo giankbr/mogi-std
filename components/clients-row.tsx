@@ -16,14 +16,23 @@ export function ClientsRow({ className }: { className?: string }) {
       <h2 id="clients-title" className="sr-only">
         Trusted by
       </h2>
-      <div className="rounded-xl border bg-card p-4 md:p-6">
-        <ul className="grid grid-cols-2 items-center gap-6 sm:grid-cols-3 md:grid-cols-6">
-          {logos.map((l, i) => (
-            <li key={i} className="flex items-center justify-center">
-              <Image src={l.src || '/placeholder.svg'} alt={l.alt} width={120} height={40} className="h-6 w-auto opacity-70 grayscale" />
-            </li>
-          ))}
-        </ul>
+      <div className="rounded-xl border bg-card p-4 md:p-6 overflow-hidden">
+        <div className="relative flex overflow-hidden">
+          <div className="flex animate-scroll-left gap-8 pr-8">
+            {logos.map((l, i) => (
+              <div key={i} className="flex items-center justify-center min-w-[120px]">
+                <Image src={l.src || '/placeholder.svg'} alt={l.alt} width={120} height={40} className="h-6 w-auto opacity-70 grayscale" />
+              </div>
+            ))}
+          </div>
+          <div className="flex animate-scroll-left gap-8 pr-8" aria-hidden="true">
+            {logos.map((l, i) => (
+              <div key={`duplicate-${i}`} className="flex items-center justify-center min-w-[120px]">
+                <Image src={l.src || '/placeholder.svg'} alt={l.alt} width={120} height={40} className="h-6 w-auto opacity-70 grayscale" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
