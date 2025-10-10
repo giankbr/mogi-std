@@ -27,25 +27,37 @@ export function WorkGrid({ className }: { className?: string }) {
         </a>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-        {projects.map((p, i) => (
-          <figure key={p.title} className="group overflow-hidden rounded-xl border bg-card">
-            <Image
-              src={`/.jpg?height=360&width=640&query=${encodeURIComponent('portfolio thumbnail for ' + p.title)}`}
-              alt={p.title}
-              width={640}
-              height={360}
-              className="h-44 md:h-48 w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-            />
-            <figcaption className="flex items-center justify-between px-4 py-3">
-              <div>
-                <p className="text-sm font-medium">{p.title}</p>
-                <p className="text-xs text-muted-foreground">{p.tag}</p>
+      {/* Horizontal Scrollable Container */}
+      <div className="relative -mx-4 px-4">
+        <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+          {projects.map((p, i) => (
+            <figure key={p.title} className="group flex-none w-[85vw] sm:w-[420px] md:w-[480px] overflow-hidden rounded-xl border bg-card snap-start">
+              <div className="relative aspect-[16/9]">
+                <Image
+                  src={`/.jpg?height=360&width=640&query=${encodeURIComponent('portfolio thumbnail for ' + p.title)}`}
+                  alt={p.title}
+                  width={640}
+                  height={360}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                />
               </div>
-              <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">{t('work.view')}</span>
-            </figcaption>
-          </figure>
-        ))}
+              <figcaption className="flex items-center justify-between px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium">{p.title}</p>
+                  <p className="text-xs text-muted-foreground">{p.tag}</p>
+                </div>
+                <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">{t('work.view')}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        {/* Scroll Indicator (optional) */}
+        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+          {projects.map((_, i) => (
+            <div key={i} className="h-1 w-8 rounded-full bg-muted" />
+          ))}
+        </div>
       </div>
     </section>
   );
