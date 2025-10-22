@@ -14,9 +14,11 @@ export default function AdminDashboard() {
             totalTestimonials: 0,
             newContacts: 0,
       });
+      const [mounted, setMounted] = useState(false);
 
       // Simulating data loading - in a real app, you'd fetch from your API
       useEffect(() => {
+            setMounted(true);
             // Mock data for demonstration
             setStats({
                   totalProjects: 24,
@@ -25,6 +27,17 @@ export default function AdminDashboard() {
                   newContacts: 5,
             });
       }, []);
+
+      // Format date consistently
+      const formatDate = (date: Date) => {
+            if (!mounted) return '';
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      };
+
+      const formatDateTime = (date: Date) => {
+            if (!mounted) return '';
+            return date.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+      };
 
       return (
             <div className="flex flex-col gap-8">
@@ -173,7 +186,7 @@ export default function AdminDashboard() {
                                                             </div>
                                                             <div>
                                                                   <p className="text-sm font-semibold group-hover:text-accent transition-colors">{project.title}</p>
-                                                                  <p className="text-xs text-muted-foreground">Added {new Date(project.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                                                                  <p className="text-xs text-muted-foreground">Added {formatDate(new Date(project.date))}</p>
                                                             </div>
                                                       </div>
                                                       <Badge variant={project.status === 'Completed' ? 'outline' : project.status === 'In Progress' ? 'secondary' : 'default'} className={project.status === 'Completed' ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400' : project.status === 'In Progress' ? 'bg-blue-100 text-blue-800 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400' : ''}>
@@ -225,7 +238,7 @@ export default function AdminDashboard() {
                                                             </div>
                                                             <div>
                                                                   <p className="text-sm font-semibold group-hover:text-accent transition-colors">{contact.name}</p>
-                                                                  <p className="text-xs text-muted-foreground">Submitted {new Date(contact.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                                                                  <p className="text-xs text-muted-foreground">Submitted {formatDate(new Date(contact.date))}</p>
                                                             </div>
                                                       </div>
                                                       <Badge variant={contact.status === 'Contacted' ? 'secondary' : 'default'} className={contact.status === 'Contacted' ? 'bg-purple-100 text-purple-800 hover:bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400' : ''}>
@@ -299,7 +312,7 @@ export default function AdminDashboard() {
                                                             </div>
                                                             <div className="flex-1 space-y-1">
                                                                   <p className="text-sm font-medium">{activity.action}</p>
-                                                                  <p className="text-xs text-muted-foreground">{new Date(activity.time).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>
+                                                                  <p className="text-xs text-muted-foreground">{formatDateTime(new Date(activity.time))}</p>
                                                             </div>
                                                       </div>
                                                 ))}
@@ -327,7 +340,7 @@ export default function AdminDashboard() {
                                                             </div>
                                                             <div className="flex-1 space-y-1">
                                                                   <p className="text-sm font-medium">{activity.action}</p>
-                                                                  <p className="text-xs text-muted-foreground">{new Date(activity.time).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>
+                                                                  <p className="text-xs text-muted-foreground">{formatDateTime(new Date(activity.time))}</p>
                                                             </div>
                                                       </div>
                                                 ))}
@@ -341,7 +354,7 @@ export default function AdminDashboard() {
                                                       </div>
                                                       <div className="flex-1 space-y-1">
                                                             <p className="text-sm font-medium">Contact form submitted</p>
-                                                            <p className="text-xs text-muted-foreground">{new Date(Date.now() - 86400000).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>
+                                                            <p className="text-xs text-muted-foreground">{formatDateTime(new Date(Date.now() - 86400000))}</p>
                                                       </div>
                                                 </div>
                                           </div>
@@ -354,7 +367,7 @@ export default function AdminDashboard() {
                                                       </div>
                                                       <div className="flex-1 space-y-1">
                                                             <p className="text-sm font-medium">User logged in</p>
-                                                            <p className="text-xs text-muted-foreground">{new Date(Date.now() - 2 * 86400000).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>
+                                                            <p className="text-xs text-muted-foreground">{formatDateTime(new Date(Date.now() - 2 * 86400000))}</p>
                                                       </div>
                                                 </div>
                                           </div>
