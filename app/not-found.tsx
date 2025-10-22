@@ -83,18 +83,11 @@ export default function NotFound() {
 
   // Spawn moles/traps/bosses
   useEffect(() => {
-    if (!gameStarted || gameOver || gameWon) {
-      console.log('Spawn disabled:', { gameStarted, gameOver, gameWon });
-      return;
-    }
-
-    console.log('Starting spawn interval...');
+    if (!gameStarted || gameOver || gameWon) return;
 
     const spawnInterval = setInterval(() => {
       setHoles((prev) => {
         const emptyHoles = prev.filter((h) => !h.active);
-        console.log('Empty holes:', emptyHoles.length, 'out of', prev.length);
-
         if (emptyHoles.length === 0) return prev;
 
         // Pick random empty hole
@@ -110,14 +103,11 @@ export default function NotFound() {
           type = 'mole';
         }
 
-        console.log(`Spawning ${type} at hole ${randomHole.id}`);
-
         // Activate hole
         const newHoles = prev.map((h) => (h.id === randomHole.id ? { ...h, active: true, type } : h));
 
         // Auto-hide after moleSpeed
         setTimeout(() => {
-          console.log(`Hiding ${type} at hole ${randomHole.id}`);
           setHoles((prevHoles) => prevHoles.map((h) => (h.id === randomHole.id ? { ...h, active: false, type: null } : h)));
         }, currentLevelData.moleSpeed);
 
@@ -125,10 +115,7 @@ export default function NotFound() {
       });
     }, 600);
 
-    return () => {
-      console.log('Clearing spawn interval');
-      clearInterval(spawnInterval);
-    };
+    return () => clearInterval(spawnInterval);
   }, [gameStarted, gameOver, gameWon, currentLevelData]);
 
   const handleHoleClick = (hole: Hole) => {
