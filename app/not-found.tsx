@@ -91,7 +91,9 @@ export default function NotFound() {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [showScoreAnimation, setShowScoreAnimation] = useState(false);
-  const [forceRender, setForceRender] = useState(0);
+  const [aimAngle, setAimAngle] = useState(-Math.PI / 2); // Default aim up
+  const [power, setPower] = useState(8); // Default power
+  const [useKeyboard, setUseKeyboard] = useState(false);
 
   const canvasWidth = 400;
   const canvasHeight = 500;
@@ -263,6 +265,50 @@ export default function NotFound() {
     [addParticles]
   );
 
+  // Keyboard controls
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (ballRef.current.isFlying || gameWon || gameOver) return;
+
+      setUseKeyboard(true);
+      setShowTutorial(false);
+
+      switch (e.key) {
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+          setAimAngle((prev) => Math.max(prev - 0.1, -Math.PI));
+          break;
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
+          setAimAngle((prev) => Math.min(prev + 0.1, 0));
+          break;
+        case 'ArrowUp':
+        case 'w':
+        case 'W':
+          setPower((prev) => Math.min(prev + 0.5, 15));
+          break;
+        case 'ArrowDown':
+        case 's':
+        case 'S':
+          setPower((prev) => Math.max(prev - 0.5, 3));
+          break;
+        case ' ':
+        case 'Enter':
+          e.preventDefault();
+          // Shoot!
+          ballRef.current.vx = Math.cos(aimAngle) * power;
+          ballRef.current.vy = Math.sin(aimAngle) * power;
+          ballRef.current.isFlying = true;
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [aimAngle, power, gameWon, gameOver]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -368,36 +414,62 @@ export default function NotFound() {
         // Draw ball
         drawBasketball(ctx, ball.x, ball.y, ball.radius, ball.rotation);
 
-        // Draw trajectory preview when dragging
-        if (isDragging && !ball.isFlying) {
-          const distance = Math.hypot(dragStart.x - ball.x, dragStart.y - ball.y);
-          const power = Math.min(distance, 150);
+        // Draw trajectory preview (both drag and keyboard mode)
+        if (!ball.isFlying && (isDragging || useKeyboard)) {
+          let angle, currentPower;
+
+          if (isDragging) {
+            // Mouse/Touch drag mode
+            const distance = Math.hypot(dragStart.x - ball.x, dragStart.y - ball.y);
+            currentPower = Math.min(distance, 150) / 15;
+            angle = Math.atan2(dragStart.y - ball.y, dragStart.x - ball.x);
+          } else {
+            // Keyboard mode
+            currentPower = power;
+            angle = aimAngle;
+          }
 
           // Draw power meter
-          drawPowerMeter(ctx, power);
+          drawPowerMeter(ctx, currentPower * 15);
 
-          // Trajectory line
-          ctx.beginPath();
-          ctx.setLineDash([8, 8]);
-          ctx.moveTo(ball.x, ball.y);
-          const angle = Math.atan2(dragStart.y - ball.y, dragStart.x - ball.x);
-          const previewLength = power * 1.5;
-          ctx.lineTo(ball.x - Math.cos(angle) * previewLength, ball.y - Math.sin(angle) * previewLength);
-          ctx.strokeStyle = '#fbbf24';
-          ctx.lineWidth = 3;
-          ctx.stroke();
-          ctx.setLineDash([]);
-
-          // Target indicator
-          const targetX = ball.x - Math.cos(angle) * previewLength;
-          const targetY = ball.y - Math.sin(angle) * previewLength;
-          ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
-          ctx.beginPath();
-          ctx.arc(targetX, targetY, 20, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#fbbf24';
+          // Draw trajectory arc with dots (more intuitive)
+          ctx.strokeStyle = '#333333';
+          ctx.fillStyle = '#333333';
           ctx.lineWidth = 2;
-          ctx.stroke();
+
+          // Simulate ball trajectory
+          let simX = ball.x;
+          let simY = ball.y;
+          let simVx = Math.cos(angle) * currentPower;
+          let simVy = Math.sin(angle) * currentPower;
+
+          // Draw dots along trajectory
+          for (let i = 0; i < 30; i++) {
+            if (simY > canvasHeight || simX < 0 || simX > canvasWidth) break;
+
+            // Draw dot
+            ctx.beginPath();
+            ctx.arc(simX, simY, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Update position
+            simVy += 0.4; // gravity
+            simX += simVx;
+            simY += simVy;
+          }
+
+          // Draw arrow at ball showing direction
+          ctx.save();
+          ctx.translate(ball.x, ball.y);
+          ctx.rotate(angle);
+          ctx.fillStyle = '#333333';
+          ctx.beginPath();
+          ctx.moveTo(25, 0);
+          ctx.lineTo(15, -5);
+          ctx.lineTo(15, 5);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
         }
 
         // Update and draw particles
@@ -445,7 +517,7 @@ export default function NotFound() {
         cancelAnimationFrame(animationId);
       }
     };
-  }, [currentLevel, isDragging, dragStart, showScoreAnimation, createScoreParticles, createMissParticles]);
+  }, [currentLevel, isDragging, dragStart, showScoreAnimation, useKeyboard, aimAngle, power, createScoreParticles, createMissParticles]);
 
   // Check level completion
   useEffect(() => {
@@ -488,6 +560,7 @@ export default function NotFound() {
       setIsDragging(true);
       setDragStart({ x, y });
       setShowTutorial(false);
+      setUseKeyboard(false); // Switch to mouse mode
     }
   };
 
@@ -577,12 +650,28 @@ export default function NotFound() {
                 className="absolute inset-0 z-10 flex items-center justify-center bg-background/95 backdrop-blur-sm rounded-lg animate-in fade-in cursor-pointer"
                 onClick={() => setShowTutorial(false)}
               >
-                <div className="text-center p-6" onClick={(e) => e.stopPropagation()}>
-                  <div className="text-6xl mb-4">👆</div>
-                  <p className="font-semibold text-lg mb-2">Drag & Release to Shoot!</p>
-                  <p className="text-muted-foreground text-sm mb-4">Click the ball, drag back, and let go!</p>
-                  <Button size="sm" onClick={() => setShowTutorial(false)}>
-                    Got it!
+                <div className="text-center p-6 max-w-sm" onClick={(e) => e.stopPropagation()}>
+                  <div className="text-5xl mb-3">🏀</div>
+                  <p className="font-semibold text-lg mb-3">How to Play</p>
+                  
+                  <div className="text-left space-y-2 mb-4 text-sm">
+                    <div className="bg-muted p-3 rounded-lg">
+                      <p className="font-medium mb-1">🖱️ Mouse/Touch:</p>
+                      <p className="text-muted-foreground text-xs">Drag the ball and release to shoot</p>
+                    </div>
+                    
+                    <div className="bg-muted p-3 rounded-lg">
+                      <p className="font-medium mb-1">⌨️ Keyboard:</p>
+                      <p className="text-muted-foreground text-xs">
+                        <span className="font-mono bg-background px-1 rounded">←→</span> or <span className="font-mono bg-background px-1 rounded">A/D</span> = Aim<br/>
+                        <span className="font-mono bg-background px-1 rounded">↑↓</span> or <span className="font-mono bg-background px-1 rounded">W/S</span> = Power<br/>
+                        <span className="font-mono bg-background px-1 rounded">Space</span> = Shoot!
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <Button size="sm" onClick={() => setShowTutorial(false)} className="w-full">
+                    Let's Play!
                   </Button>
                 </div>
               </div>
@@ -609,6 +698,7 @@ export default function NotFound() {
                   setIsDragging(true);
                   setDragStart({ x, y });
                   setShowTutorial(false);
+                  setUseKeyboard(false); // Switch to touch mode
                 }
               }}
               onTouchMove={(e) => {
@@ -627,6 +717,21 @@ export default function NotFound() {
               className="w-full border rounded-lg cursor-pointer touch-none"
               style={{ touchAction: 'none' }}
             />
+            
+            {/* Control Hint */}
+            {!showTutorial && !gameWon && !gameOver && (
+              <p className="text-center text-xs text-muted-foreground mt-3">
+                {useKeyboard ? (
+                  <>
+                    ← → = Aim | ↑ ↓ = Power | <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground">Space</kbd> = Shoot
+                  </>
+                ) : (
+                  <>
+                    Drag & release to shoot | Press any key for keyboard controls
+                  </>
+                )}
+              </p>
+            )}
           </div>
 
           {/* Win Message */}
