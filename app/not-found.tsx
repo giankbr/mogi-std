@@ -137,24 +137,24 @@ export default function NotFound() {
     // Backboard
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(x + width / 2 - 40, y - backboardHeight, 80, backboardHeight);
-    ctx.strokeStyle = '#ff6b35';
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#333333';
+    ctx.lineWidth = 2;
     ctx.strokeRect(x + width / 2 - 40, y - backboardHeight, 80, backboardHeight);
 
     // Backboard square (target area)
-    ctx.strokeStyle = '#ff6b35';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#666666';
+    ctx.lineWidth = 1.5;
     ctx.strokeRect(x + width / 2 - 20, y - 30, 40, 25);
 
     // Rim
-    ctx.strokeStyle = '#ff4500';
-    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#333333';
+    ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.arc(x + width / 2, y, width / 2, 0, Math.PI, true);
     ctx.stroke();
 
     // Net (animated)
-    ctx.strokeStyle = '#ffffff';
+    ctx.strokeStyle = '#999999';
     ctx.lineWidth = 1;
     for (let i = 0; i < 6; i++) {
       const startX = x + (width / 6) * i;
@@ -168,17 +168,14 @@ export default function NotFound() {
 
   // Draw court background
   const drawCourt = (ctx: CanvasRenderingContext2D) => {
-    // Court gradient
-    const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
-    gradient.addColorStop(0, '#1a1f2e');
-    gradient.addColorStop(1, '#0f1419');
-    ctx.fillStyle = gradient;
+    // Simple background
+    ctx.fillStyle = '#fafafa';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    // Court lines
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2;
-    ctx.globalAlpha = 0.15;
+    // Subtle court lines
+    ctx.strokeStyle = '#e5e5e5';
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.5;
 
     // Three-point line (arc)
     ctx.beginPath();
@@ -191,7 +188,7 @@ export default function NotFound() {
     ctx.lineTo(300, canvasHeight - 100);
     ctx.stroke();
 
-    // Center lines
+    // Center line
     ctx.beginPath();
     ctx.moveTo(0, canvasHeight / 2);
     ctx.lineTo(canvasWidth, canvasHeight / 2);
@@ -296,18 +293,16 @@ export default function NotFound() {
             }
           }
 
-          // Draw obstacle with 3D effect
-          ctx.fillStyle = '#475569';
+          // Draw obstacle
+          ctx.fillStyle = '#d4d4d4';
           ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-          ctx.fillStyle = '#334155';
-          ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height / 2);
-          ctx.strokeStyle = '#64748b';
+          ctx.strokeStyle = '#a3a3a3';
           ctx.lineWidth = 2;
           ctx.strokeRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
 
           // Moving indicator
           if (obstacle.moving) {
-            ctx.fillStyle = '#fbbf24';
+            ctx.fillStyle = '#666666';
             ctx.beginPath();
             ctx.arc(obstacle.x + obstacle.width / 2, obstacle.y - 8, 3, 0, Math.PI * 2);
             ctx.fill();
@@ -536,56 +531,59 @@ export default function NotFound() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="max-w-4xl w-full">
         {/* Header */}
-        <div className="text-center mb-6">
-          <div className="inline-block">
-            <h1 className="text-7xl md:text-8xl font-serif font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent mb-2">404</h1>
-            <div className="h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent" />
-          </div>
-          <p className="text-xl md:text-2xl font-medium mt-4 mb-1 text-white">Page Not Found</p>
-          <p className="text-slate-400">Play some basketball while you're here! 🏀</p>
+        <div className="text-center mb-8">
+          <h1 className="text-8xl md:text-9xl font-serif font-bold mb-4">404</h1>
+          <p className="text-2xl md:text-3xl font-medium mb-2">Page Not Found</p>
+          <p className="text-muted-foreground">Play some basketball while you're here! 🏀</p>
         </div>
 
         {/* Level Info */}
-        <div className="text-center mb-4">
-          <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 rounded-full px-4 py-2">
-            <Zap className="h-4 w-4 text-orange-500" />
-            <span className="font-semibold text-white">{levels[currentLevel].name}</span>
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 bg-muted rounded-full px-4 py-2">
+            <Zap className="h-4 w-4 text-accent" />
+            <span className="font-semibold">{levels[currentLevel].name}</span>
           </div>
         </div>
 
         {/* Game Stats */}
-        <div className="flex items-center justify-center gap-4 md:gap-8 mb-6">
-          <div className="text-center bg-slate-800/50 backdrop-blur rounded-lg px-4 py-2 border border-slate-700">
-            <p className="text-xs text-slate-400 mb-1">Level</p>
-            <p className="text-xl font-bold text-white">
+        <div className="flex items-center justify-center gap-4 md:gap-8 mb-8">
+          <div className="text-center">
+            <p className="text-sm text-muted-foreground mb-1">Level</p>
+            <p className="text-2xl font-bold">
               {currentLevel + 1}/{levels.length}
             </p>
           </div>
-          <div className="text-center bg-slate-800/50 backdrop-blur rounded-lg px-4 py-2 border border-slate-700">
-            <p className="text-xs text-slate-400 mb-1">Score</p>
-            <p className="text-xl font-bold text-orange-500">
+          <div className="text-center">
+            <p className="text-sm text-muted-foreground mb-1">Score</p>
+            <p className="text-2xl font-bold text-accent">
               {score}/{levels[currentLevel].requiredScore}
             </p>
           </div>
-          <div className="text-center bg-slate-800/50 backdrop-blur rounded-lg px-4 py-2 border border-slate-700">
-            <p className="text-xs text-slate-400 mb-1">Shots Left</p>
-            <p className="text-xl font-bold text-white">{attempts}</p>
+          <div className="text-center">
+            <p className="text-sm text-muted-foreground mb-1">Shots Left</p>
+            <p className="text-2xl font-bold">{attempts}</p>
           </div>
         </div>
 
         {/* Game Board */}
-        <Card className="p-4 md:p-6 bg-slate-800/50 backdrop-blur border-slate-700 relative">
+        <Card className="p-6 md:p-8 relative">
           <div className="max-w-md mx-auto relative">
             {/* Tutorial Overlay */}
             {showTutorial && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-lg animate-in fade-in">
-                <div className="text-center p-6">
+              <div
+                className="absolute inset-0 z-10 flex items-center justify-center bg-background/95 backdrop-blur-sm rounded-lg animate-in fade-in cursor-pointer"
+                onClick={() => setShowTutorial(false)}
+              >
+                <div className="text-center p-6" onClick={(e) => e.stopPropagation()}>
                   <div className="text-6xl mb-4">👆</div>
-                  <p className="text-white font-semibold text-lg mb-2">Drag & Release to Shoot!</p>
-                  <p className="text-slate-300 text-sm">Click the ball, drag back, and let go!</p>
+                  <p className="font-semibold text-lg mb-2">Drag & Release to Shoot!</p>
+                  <p className="text-muted-foreground text-sm mb-4">Click the ball, drag back, and let go!</p>
+                  <Button size="sm" onClick={() => setShowTutorial(false)}>
+                    Got it!
+                  </Button>
                 </div>
               </div>
             )}
@@ -598,7 +596,35 @@ export default function NotFound() {
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
               onMouseLeave={() => setIsDragging(false)}
-              className="w-full border-2 border-slate-700 rounded-lg bg-slate-900 cursor-pointer shadow-2xl"
+              onTouchStart={(e) => {
+                const touch = e.touches[0];
+                const rect = canvasRef.current?.getBoundingClientRect();
+                if (!rect) return;
+                const scaleX = canvasWidth / rect.width;
+                const scaleY = canvasHeight / rect.height;
+                const x = (touch.clientX - rect.left) * scaleX;
+                const y = (touch.clientY - rect.top) * scaleY;
+                const distance = Math.hypot(x - ballRef.current.x, y - ballRef.current.y);
+                if (distance <= ballRef.current.radius * 3) {
+                  setIsDragging(true);
+                  setDragStart({ x, y });
+                  setShowTutorial(false);
+                }
+              }}
+              onTouchMove={(e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvasRef.current?.getBoundingClientRect();
+                if (!rect) return;
+                const scaleX = canvasWidth / rect.width;
+                const scaleY = canvasHeight / rect.height;
+                const x = (touch.clientX - rect.left) * scaleX;
+                const y = (touch.clientY - rect.top) * scaleY;
+                setDragStart({ x, y });
+              }}
+              onTouchEnd={handleMouseUp}
+              className="w-full border rounded-lg cursor-pointer touch-none"
               style={{ touchAction: 'none' }}
             />
           </div>
@@ -606,45 +632,45 @@ export default function NotFound() {
           {/* Win Message */}
           {gameWon && (
             <div className="mt-6 text-center animate-in fade-in zoom-in duration-500">
-              <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 text-green-500 px-6 py-3 rounded-full mb-2">
+              <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-6 py-3 rounded-full mb-2">
                 <Trophy className="h-5 w-5" />
                 <span className="font-semibold">All Levels Completed! 🎉</span>
               </div>
-              <p className="text-slate-400">You're a basketball champion!</p>
+              <p className="text-muted-foreground">You're a basketball champion!</p>
             </div>
           )}
 
           {/* Game Over Message */}
           {gameOver && (
             <div className="mt-6 text-center animate-in fade-in zoom-in duration-500">
-              <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-500 px-6 py-3 rounded-full mb-2">
+              <div className="inline-flex items-center gap-2 bg-destructive/10 text-destructive px-6 py-3 rounded-full mb-2">
                 <span className="font-semibold">Game Over!</span>
               </div>
-              <p className="text-slate-400">Out of shots. Try again!</p>
+              <p className="text-muted-foreground">Out of shots. Try again!</p>
             </div>
           )}
         </Card>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-          <Button onClick={resetGame} variant="outline" size="lg" className="border-slate-700 hover:bg-slate-800">
+        <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+          <Button onClick={resetGame} variant="outline" size="lg">
             <RotateCcw className="mr-2 h-4 w-4" />
             New Game
           </Button>
           <Link href="/">
-            <Button size="lg" className="bg-orange-500 hover:bg-orange-600">
+            <Button size="lg">
               <Home className="mr-2 h-4 w-4" />
               Go Home
             </Button>
           </Link>
-          <Button variant="ghost" size="lg" onClick={() => window.history.back()} className="hover:bg-slate-800">
+          <Button variant="ghost" size="lg" onClick={() => window.history.back()}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Go Back
           </Button>
         </div>
 
         {/* Footer Text */}
-        <p className="text-center text-sm text-slate-500 mt-6">Lost your way? Score some hoops first! 🏀</p>
+        <p className="text-center text-sm text-muted-foreground mt-8">Lost your way? Score some hoops first! 🏀</p>
       </div>
     </div>
   );
