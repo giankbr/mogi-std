@@ -1,28 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { PlusIcon, SearchIcon, MoreHorizontalIcon, TrashIcon, PencilIcon, StarIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { MoreHorizontalIcon, PencilIcon, PlusIcon, SearchIcon, StarIcon, TrashIcon } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface Client {
@@ -83,44 +71,38 @@ export default function ClientsPage() {
     },
   ]);
 
-  const filteredClients = clients.filter(client =>
-    client.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredClients = clients.filter((client) => client.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleSelectAll = () => {
     if (selectedClients.length === filteredClients.length) {
       setSelectedClients([]);
     } else {
-      setSelectedClients(filteredClients.map(c => c.id));
+      setSelectedClients(filteredClients.map((c) => c.id));
     }
   };
 
   const handleSelectClient = (id: string) => {
     if (selectedClients.includes(id)) {
-      setSelectedClients(selectedClients.filter(clientId => clientId !== id));
+      setSelectedClients(selectedClients.filter((clientId) => clientId !== id));
     } else {
       setSelectedClients([...selectedClients, id]);
     }
   };
 
   const handleDeleteClient = (id: string) => {
-    setClients(clients.filter(client => client.id !== id));
-    setSelectedClients(selectedClients.filter(clientId => clientId !== id));
+    setClients(clients.filter((client) => client.id !== id));
+    setSelectedClients(selectedClients.filter((clientId) => clientId !== id));
     toast.success('Client deleted successfully');
   };
 
   const handleBulkDelete = () => {
-    setClients(clients.filter(client => !selectedClients.includes(client.id)));
+    setClients(clients.filter((client) => !selectedClients.includes(client.id)));
     setSelectedClients([]);
     toast.success(`${selectedClients.length} clients deleted successfully`);
   };
 
   const handleToggleFeatured = (id: string) => {
-    setClients(clients.map(client =>
-      client.id === id
-        ? { ...client, featured: !client.featured }
-        : client
-    ));
+    setClients(clients.map((client) => (client.id === id ? { ...client, featured: !client.featured } : client)));
     toast.success('Client updated successfully');
   };
 
@@ -141,12 +123,7 @@ export default function ClientsPage() {
       {/* Search */}
       <div className="relative max-w-sm">
         <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          placeholder="Search clients..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9"
-        />
+        <Input placeholder="Search clients..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-9" />
       </div>
 
       {/* Clients Table */}
@@ -155,10 +132,7 @@ export default function ClientsPage() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-12">
-                <Checkbox
-                  checked={filteredClients.length > 0 && selectedClients.length === filteredClients.length}
-                  onCheckedChange={handleSelectAll}
-                />
+                <Checkbox checked={filteredClients.length > 0 && selectedClients.length === filteredClients.length} onCheckedChange={handleSelectAll} />
               </TableHead>
               <TableHead className="w-20">Logo</TableHead>
               <TableHead>Name</TableHead>
@@ -173,33 +147,17 @@ export default function ClientsPage() {
               filteredClients.map((client) => (
                 <TableRow key={client.id}>
                   <TableCell>
-                    <Checkbox
-                      checked={selectedClients.includes(client.id)}
-                      onCheckedChange={() => handleSelectClient(client.id)}
-                    />
+                    <Checkbox checked={selectedClients.includes(client.id)} onCheckedChange={() => handleSelectClient(client.id)} />
                   </TableCell>
                   <TableCell>
                     <div className="relative h-8 w-16 overflow-hidden rounded border">
-                      <Image
-                        src={client.logo}
-                        alt={client.name}
-                        width={60}
-                        height={30}
-                        className="object-contain"
-                      />
+                      <Image src={client.logo} alt={client.name} width={60} height={30} className="object-contain" />
                     </div>
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {client.name}
-                  </TableCell>
+                  <TableCell className="font-medium">{client.name}</TableCell>
                   <TableCell>
                     {client.url ? (
-                      <a
-                        href={client.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline"
-                      >
+                      <a href={client.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
                         {new URL(client.url).hostname}
                       </a>
                     ) : (
@@ -207,11 +165,7 @@ export default function ClientsPage() {
                     )}
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={client.featured ? 'default' : 'secondary'}
-                      className="cursor-pointer"
-                      onClick={() => handleToggleFeatured(client.id)}
-                    >
+                    <Badge variant={client.featured ? 'default' : 'secondary'} className="cursor-pointer" onClick={() => handleToggleFeatured(client.id)}>
                       {client.featured ? (
                         <span className="flex items-center gap-1">
                           <StarIcon className="h-3 w-3" /> Featured
@@ -235,10 +189,7 @@ export default function ClientsPage() {
                             <PencilIcon className="mr-2 h-4 w-4" /> Edit
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleDeleteClient(client.id)}
-                          className="text-destructive focus:text-destructive"
-                        >
+                        <DropdownMenuItem onClick={() => handleDeleteClient(client.id)} className="text-destructive focus:text-destructive">
                           <TrashIcon className="mr-2 h-4 w-4" /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
