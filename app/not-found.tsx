@@ -443,14 +443,17 @@ export default function NotFound() {
           let simVx = Math.cos(angle) * currentPower;
           let simVy = Math.sin(angle) * currentPower;
 
-          // Draw dots along trajectory
-          for (let i = 0; i < 30; i++) {
-            if (simY > canvasHeight || simX < 0 || simX > canvasWidth) break;
+          // Draw dots along trajectory (extended for full arc)
+          for (let i = 0; i < 80; i++) {
+            // Only break if ball goes way out of bounds
+            if (simY > canvasHeight + 50 || simX < -100 || simX > canvasWidth + 100) break;
 
-            // Draw dot
-            ctx.beginPath();
-            ctx.arc(simX, simY, 3, 0, Math.PI * 2);
-            ctx.fill();
+            // Draw dot every 2 frames for cleaner look
+            if (i % 2 === 0) {
+              ctx.beginPath();
+              ctx.arc(simX, simY, 3, 0, Math.PI * 2);
+              ctx.fill();
+            }
 
             // Update position
             simVy += 0.4; // gravity
@@ -653,23 +656,25 @@ export default function NotFound() {
                 <div className="text-center p-6 max-w-sm" onClick={(e) => e.stopPropagation()}>
                   <div className="text-5xl mb-3">🏀</div>
                   <p className="font-semibold text-lg mb-3">How to Play</p>
-                  
+
                   <div className="text-left space-y-2 mb-4 text-sm">
                     <div className="bg-muted p-3 rounded-lg">
                       <p className="font-medium mb-1">🖱️ Mouse/Touch:</p>
                       <p className="text-muted-foreground text-xs">Drag the ball and release to shoot</p>
                     </div>
-                    
+
                     <div className="bg-muted p-3 rounded-lg">
                       <p className="font-medium mb-1">⌨️ Keyboard:</p>
                       <p className="text-muted-foreground text-xs">
-                        <span className="font-mono bg-background px-1 rounded">←→</span> or <span className="font-mono bg-background px-1 rounded">A/D</span> = Aim<br/>
-                        <span className="font-mono bg-background px-1 rounded">↑↓</span> or <span className="font-mono bg-background px-1 rounded">W/S</span> = Power<br/>
+                        <span className="font-mono bg-background px-1 rounded">←→</span> or <span className="font-mono bg-background px-1 rounded">A/D</span> = Aim
+                        <br />
+                        <span className="font-mono bg-background px-1 rounded">↑↓</span> or <span className="font-mono bg-background px-1 rounded">W/S</span> = Power
+                        <br />
                         <span className="font-mono bg-background px-1 rounded">Space</span> = Shoot!
                       </p>
                     </div>
                   </div>
-                  
+
                   <Button size="sm" onClick={() => setShowTutorial(false)} className="w-full">
                     Let's Play!
                   </Button>
@@ -717,7 +722,7 @@ export default function NotFound() {
               className="w-full border rounded-lg cursor-pointer touch-none"
               style={{ touchAction: 'none' }}
             />
-            
+
             {/* Control Hint */}
             {!showTutorial && !gameWon && !gameOver && (
               <p className="text-center text-xs text-muted-foreground mt-3">
@@ -726,9 +731,7 @@ export default function NotFound() {
                     ← → = Aim | ↑ ↓ = Power | <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground">Space</kbd> = Shoot
                   </>
                 ) : (
-                  <>
-                    Drag & release to shoot | Press any key for keyboard controls
-                  </>
+                  <>Drag & release to shoot | Press any key for keyboard controls</>
                 )}
               </p>
             )}
