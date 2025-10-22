@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(uuid())
+  name           String
+  email          String   @unique
+  password       String
+  role           Role     @default(ADMIN)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  description String?  @db.Text
+  slug        String   @unique
+  clientName  String?  @map("client_name")
+  projectType String?  @map("project_type")
+  thumbnail   String?
+  featured    Boolean  @default(false)
+  images      Image[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("projects")
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  alt       String?
+  projectId String   @map("project_id")
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("images")
+}
+
+model Testimonial {
+  id        String   @id @default(uuid())
+  name      String
+  position  String?
+  company   String?
+  content   String   @db.Text
+  avatar    String?
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("testimonials")
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  logo      String
+  url       String?
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("clients")
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  icon        String?
+  slug        String   @unique
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("services")
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  company   String?
+  message   String   @db.Text
+  type      String?
+  budget    String?
+  status    ContactStatus @default(NEW)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("contacts")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+enum ContactStatus {
+  NEW
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}

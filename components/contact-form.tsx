@@ -85,20 +85,22 @@ export function ContactForm({ className }: { className?: string }) {
   };
 
   return (
-    <section id="contact" className={cn('mx-auto max-w-6xl px-4 py-4 md:py-6', className)} aria-labelledby="contact-title">
-      <div className="grid gap-8 md:grid-cols-2">
+    <section id="contact" className={cn('mx-auto max-w-6xl px-4', className)} aria-labelledby="contact-title">
+      <div className="grid gap-10 md:gap-12 lg:grid-cols-2">
         {/* Left Column - Info */}
-        <div>
-          <h2 id="contact-title" className="font-serif text-3xl md:text-4xl font-bold tracking-tight">
-            {t('contact.title')} <span className="text-accent">{t('contact.titleAccent')}</span>
-          </h2>
-          <p className="mt-4 text-base text-muted-foreground leading-relaxed">{t('contact.subtitle')}</p>
+        <div className="space-y-8 md:space-y-10">
+          <div>
+            <h2 id="contact-title" className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+              {t('contact.title')} <span className="text-accent">{t('contact.titleAccent')}</span>
+            </h2>
+            <p className="mt-4 md:mt-6 text-base md:text-lg text-muted-foreground leading-relaxed">{t('contact.subtitle')}</p>
+          </div>
 
-          <div className="mt-8 space-y-6">
+          <div className="space-y-8">
             <div>
-              <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3">{t('contact.contactInfoTitle')}</h3>
+              <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-4">{t('contact.contactInfoTitle')}</h3>
               <div className="space-y-3">
-                <a href={`mailto:${t('contact.email')}`} className="block text-foreground hover:text-accent transition-colors">
+                <a href={`mailto:${t('contact.email')}`} className="block text-lg font-medium text-foreground hover:text-accent transition-colors">
                   {t('contact.email')}
                 </a>
                 <p className="text-muted-foreground">{t('contact.availability')}</p>
@@ -106,18 +108,18 @@ export function ContactForm({ className }: { className?: string }) {
             </div>
 
             <div>
-              <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3">{t('contact.expectTitle')}</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <span className="text-accent mt-1">✓</span>
+              <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-4">{t('contact.expectTitle')}</h3>
+              <ul className="space-y-3 text-sm md:text-base text-muted-foreground">
+                <li className="flex items-start gap-3">
+                  <span className="text-accent mt-1 text-lg">✓</span>
                   <span>{t('contact.expect1')}</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-accent mt-1">✓</span>
+                <li className="flex items-start gap-3">
+                  <span className="text-accent mt-1 text-lg">✓</span>
                   <span>{t('contact.expect2')}</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-accent mt-1">✓</span>
+                <li className="flex items-start gap-3">
+                  <span className="text-accent mt-1 text-lg">✓</span>
                   <span>{t('contact.expect3')}</span>
                 </li>
               </ul>
@@ -126,8 +128,8 @@ export function ContactForm({ className }: { className?: string }) {
         </div>
 
         {/* Right Column - Form */}
-        <div className="rounded-2xl border bg-card p-6 md:p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="rounded-2xl border bg-card p-6 md:p-10 shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-2">

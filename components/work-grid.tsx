@@ -17,45 +17,51 @@ export function WorkGrid({ className }: { className?: string }) {
   const { t } = useLanguage();
 
   return (
-    <section id="work" className={cn('mx-auto max-w-6xl px-4', className)} aria-labelledby="work-title">
-      <div className="mb-6 md:mb-8 flex items-end justify-between">
-        <h2 id="work-title" className="font-serif text-2xl md:text-3xl font-semibold tracking-tight">
-          {t('work.title')}
-        </h2>
-        <a href="#contact" className="text-sm underline">
+    <section className={cn('mx-auto max-w-6xl px-4', className)} aria-labelledby="work-title">
+      <div className="mb-8 md:mb-12 flex items-end justify-between">
+        <div>
+          <h2 id="work-title" className="font-serif text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight">
+            {t('work.title')}
+          </h2>
+          <p className="mt-2 text-muted-foreground text-sm md:text-base">Selected projects that define excellence</p>
+        </div>
+        <a href="#contact" className="text-sm md:text-base underline hover:text-accent transition-colors">
           {t('work.startProject')}
         </a>
       </div>
 
       {/* Horizontal Scrollable Container */}
       <div className="relative -mx-4 px-4">
-        <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+        <div className="flex gap-4 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
           {projects.map((p, i) => (
-            <figure key={p.title} className="group flex-none w-[85vw] sm:w-[420px] md:w-[480px] overflow-hidden rounded-xl border bg-card snap-start">
-              <div className="relative aspect-[16/9]">
+            <figure
+              key={p.title}
+              className="group flex-none w-[85vw] sm:w-[420px] md:w-[480px] lg:w-[520px] overflow-hidden rounded-xl border bg-card snap-start shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="relative aspect-[16/9] overflow-hidden">
                 <Image
                   src={`/.jpg?height=360&width=640&query=${encodeURIComponent('portfolio thumbnail for ' + p.title)}`}
                   alt={p.title}
                   width={640}
                   height={360}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-              <figcaption className="flex items-center justify-between px-4 py-3">
+              <figcaption className="flex items-center justify-between p-5 md:p-6">
                 <div>
-                  <p className="text-sm font-medium">{p.title}</p>
-                  <p className="text-xs text-muted-foreground">{p.tag}</p>
+                  <p className="text-base md:text-lg font-semibold">{p.title}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{p.tag}</p>
                 </div>
-                <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">{t('work.view')}</span>
+                <span className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground transition-transform group-hover:scale-105">{t('work.view')}</span>
               </figcaption>
             </figure>
           ))}
         </div>
 
-        {/* Scroll Indicator (optional) */}
-        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+        {/* Scroll Indicator */}
+        <div className="mt-6 flex justify-center gap-2">
           {projects.map((_, i) => (
-            <div key={i} className="h-1 w-8 rounded-full bg-muted" />
+            <div key={i} className="h-1.5 w-8 rounded-full bg-muted transition-colors" />
           ))}
         </div>
       </div>

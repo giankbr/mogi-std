@@ -44,32 +44,36 @@ export default function Page() {
   };
 
   return (
-    <main>
+    <main className="overflow-x-hidden">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <Navbar />
+
+      {/* Hero Section */}
       <MotionSection delay={0.0}>
         <Hero />
       </MotionSection>
 
+      {/* Clients Marquee */}
       <MotionSection delay={0.05}>
-        <ClientsRow className="py-4 md:py-6" />
+        <ClientsRow className="py-6 md:py-8" />
       </MotionSection>
 
-      <section id="about" className="mx-auto max-w-6xl px-4 py-4 md:py-6">
+      {/* About Section */}
+      <section id="about" className="mx-auto max-w-6xl px-4 pt-8 md:pt-12 pb-12 md:pb-16">
         <div className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-xl border bg-card p-6">
+          <div className="rounded-xl border bg-card p-8 md:p-10">
             <p className="text-sm text-muted-foreground">{t('about.byNumbers')}</p>
-            <p className="mt-3 text-3xl font-semibold tracking-tight">
+            <p className="mt-4 text-4xl font-semibold tracking-tight">
               {t('about.raisedAmount')}
               <span className="text-accent">+</span>
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">{t('about.raisedText')}</p>
+            <p className="mt-2 text-sm text-muted-foreground">{t('about.raisedText')}</p>
           </div>
-          <div className="rounded-xl border bg-card p-6 md:col-span-2">
-            <h2 className="font-serif text-balance text-2xl font-semibold tracking-tight md:text-3xl">{t('about.mission')}</h2>
-            <div className="mt-4">
-              <a href="#services" className="inline-flex rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground">
+          <div className="rounded-xl border bg-card p-8 md:p-10 md:col-span-2">
+            <h2 className="font-serif text-balance text-2xl font-semibold tracking-tight md:text-4xl">{t('about.mission')}</h2>
+            <div className="mt-6">
+              <a href="#services" className="inline-flex rounded-full bg-accent px-6 py-2.5 text-sm font-medium text-accent-foreground transition-transform hover:scale-105">
                 {t('about.moreAbout')}
               </a>
             </div>
@@ -77,63 +81,56 @@ export default function Page() {
         </div>
       </section>
 
+      {/* Stats Row */}
       <MotionSection delay={0.1}>
-        <StatsRow className="pt-0 md:pt-0 pb-4 md:pb-6" />
+        <StatsRow className="pt-0 pb-8 md:pb-12" />
       </MotionSection>
 
+      {/* Feature Cards */}
       <MotionSection delay={0.15}>
-        <FeatureCards className="py-4 md:py-6" />
+        <FeatureCards className="py-8 md:py-12" />
       </MotionSection>
 
+      {/* Services Section */}
       <MotionSection delay={0.2}>
-        <ServicesAccordion className="py-4 md:py-6" />
+        <ServicesAccordion className="py-8 md:py-12" />
       </MotionSection>
 
-      {/* <MotionSection delay={0.25}>
-        <TeamSection />
-      </MotionSection> */}
-
+      {/* Work Grid */}
       <MotionSection delay={0.3}>
-        <WorkGrid />
+        <section id="work" className="py-8 md:py-12">
+          <WorkGrid />
+        </section>
       </MotionSection>
 
+      {/* Testimonials */}
       <MotionSection delay={0.35}>
-        <Testimonials className="py-4 md:py-6" />
+        <Testimonials className="py-8 md:py-12" />
       </MotionSection>
 
+      {/* FAQ Section */}
       <MotionSection delay={0.4}>
-        <FAQ className="py-4 md:py-6" />
+        <FAQ className="py-8 md:py-12" />
       </MotionSection>
 
-      {/* <MotionSection delay={0.45}>
-        <Newsletter />
-      </MotionSection> */}
-
+      {/* Contact Form */}
       <MotionSection delay={0.5}>
-        <ContactForm className="py-4 md:py-6" />
+        <ContactForm className="py-8 md:py-12" />
       </MotionSection>
 
-      <footer className="mt-4 md:mt-6 border-t">
-        <div className="mx-auto max-w-6xl px-4 py-8">
-          {/* Newsletter Section in Footer */}
-          {/* <div className="mb-8 pb-8 border-b">
-            <div className="max-w-md">
-              <h3 className="text-sm font-semibold mb-2">Subscribe to our newsletter</h3>
-              <p className="text-xs text-muted-foreground mb-4">Monthly insights and design inspiration.</p>
-              <Newsletter variant="minimal" />
-            </div>
-          </div> */}
-
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-              <p className="text-sm text-foreground">
+      {/* Footer */}
+      <footer className="border-t bg-muted/30">
+        <div className="mx-auto max-w-6xl px-4 py-10 md:py-12">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-foreground">
                 © {new Date().getFullYear()} {t('footer.copyright')}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">{t('footer.tagline')}</p>
+              <p className="text-sm text-muted-foreground">{t('footer.tagline')}</p>
             </div>
 
-            <nav aria-label="Footer" className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start sm:items-center">
-              <ul className="flex items-center gap-6 text-sm">
+            <nav aria-label="Footer" className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start sm:items-center">
+              <ul className="flex items-center gap-8 text-sm">
                 <li>
                   <a href="#work" className="text-muted-foreground hover:text-foreground transition-colors">
                     {t('footer.work')}

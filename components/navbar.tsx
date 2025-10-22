@@ -32,9 +32,9 @@ export function Navbar({ className }: { className?: string }) {
 
   return (
     <>
-      <header className={cn('sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-background/70 border-b', className)}>
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="font-semibold tracking-tight text-lg relative z-50">
+      <header className={cn('sticky top-0 z-50 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 border-b shadow-sm', className)}>
+        <div className="mx-auto max-w-6xl px-4 py-4 md:py-5 flex items-center justify-between">
+          <Link href="/" className="font-serif font-bold tracking-tight text-xl md:text-2xl relative z-50 hover:text-accent transition-colors">
             Mogi Studio
             <span aria-hidden="true" className="text-accent">
               ®
@@ -44,19 +44,19 @@ export function Navbar({ className }: { className?: string }) {
 
           {/* Desktop Navigation */}
           <nav aria-label="Primary" className="hidden md:block">
-            <ul className="flex items-center gap-4 text-sm">
+            <ul className="flex items-center gap-6 text-sm">
               <li>
-                <Link href="#work" className="hover:underline">
+                <Link href="#work" className="hover:text-accent transition-colors font-medium">
                   {t('nav.work')}
                 </Link>
               </li>
               <li>
-                <Link href="#services" className="hover:underline">
+                <Link href="#services" className="hover:text-accent transition-colors font-medium">
                   {t('nav.services')}
                 </Link>
               </li>
               <li>
-                <Link href="#about" className="hover:underline">
+                <Link href="#about" className="hover:text-accent transition-colors font-medium">
                   {t('nav.about')}
                 </Link>
               </li>
@@ -67,7 +67,10 @@ export function Navbar({ className }: { className?: string }) {
                 <ThemeToggle />
               </li>
               <li>
-                <Link href="#contact" className="inline-flex items-center rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground">
+                <Link
+                  href="#contact"
+                  className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground hover:bg-accent/90 transition-all hover:scale-105"
+                >
                   {t('nav.getInTouch')}
                 </Link>
               </li>
@@ -75,7 +78,7 @@ export function Navbar({ className }: { className?: string }) {
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex items-center gap-3 md:hidden">
             <LanguageToggle />
             <ThemeToggle />
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="relative z-50 p-2 hover:text-accent transition-colors" aria-label="Toggle menu">

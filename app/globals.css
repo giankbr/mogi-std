@@ -68,7 +68,7 @@
 @theme inline {
   --font-sans: var(--font-urbanist); /* bind Urbanist to font-sans */
   --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-sora); /* bind Sora to font-serif for headings */
+  --font-serif: var(--font-bricolage); /* bind Bricolage Grotesque to font-serif for headings */
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);

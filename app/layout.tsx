@@ -1,8 +1,9 @@
+import { ThemeProvider } from '@/components/theme-provider';
 import { LanguageProvider } from '@/lib/language-context';
 import { Analytics } from '@vercel/analytics/next';
 import { GeistMono } from 'geist/font/mono';
 import type { Metadata } from 'next';
-import { Sora, Urbanist } from 'next/font/google';
+import { Bricolage_Grotesque, Urbanist } from 'next/font/google';
 import type React from 'react';
 import { Suspense } from 'react';
 import './globals.css';
@@ -71,9 +72,9 @@ const urbanist = Urbanist({
   display: 'swap',
 });
 
-const sora = Sora({
+const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ['latin'],
-  variable: '--font-sora',
+  variable: '--font-bricolage',
   display: 'swap',
 });
 
@@ -83,7 +84,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${urbanist.variable} ${sora.variable} ${GeistMono.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${urbanist.variable} ${bricolageGrotesque.variable} ${GeistMono.variable} antialiased`}>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -92,12 +93,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans" suppressHydrationWarning>
-        <LanguageProvider>
-          <Suspense fallback={null}>
-            {children}
-            <Analytics />
-          </Suspense>
-        </LanguageProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <LanguageProvider>
+            <Suspense fallback={null}>
+              {children}
+              <Analytics />
+            </Suspense>
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
