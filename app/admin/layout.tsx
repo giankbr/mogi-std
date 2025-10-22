@@ -112,22 +112,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   key={item.title}
                   href={item.href}
                   className={cn(
-                    'flex items-center gap-3 rounded-lg text-sm font-medium transition-all relative',
-                    isActive && !isCollapsed
-                      ? 'bg-accent/10 text-accent border-l-2 border-accent pl-3 pr-4 py-3'
-                      : isActive && isCollapsed
-                      ? 'bg-accent/10 text-accent justify-center p-3'
-                      : isCollapsed
-                      ? 'hover:bg-muted text-muted-foreground hover:text-foreground justify-center p-3'
-                      : 'hover:bg-muted text-muted-foreground hover:text-foreground px-4 py-3'
+                    'flex items-center gap-3 rounded-lg text-sm font-medium transition-all',
+                    isActive ? 'bg-accent text-accent-foreground shadow-sm' : 'hover:bg-muted text-muted-foreground hover:text-foreground',
+                    isCollapsed ? 'justify-center p-3' : 'px-4 py-3'
                   )}
                   title={isCollapsed ? item.title : undefined}
                 >
                   <item.icon className="h-5 w-5 flex-shrink-0" />
                   {!isCollapsed && <span>{item.title}</span>}
-                  {isCollapsed && isActive && (
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-accent" />
-                  )}
                 </Link>
               );
             })}
@@ -137,13 +129,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className={cn('border-t p-3 flex gap-2', isCollapsed ? 'flex-col items-stretch' : 'items-center')}>
           {isCollapsed ? (
             <>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => setIsCollapsed(false)} 
-                className="hover:bg-muted"
-                title="Expand sidebar"
-              >
+              <Button variant="ghost" size="icon" onClick={() => setIsCollapsed(false)} className="hover:bg-muted" title="Expand sidebar">
                 <ChevronRight className="h-4 w-4" />
               </Button>
               <Link href="/" className="rounded-lg hover:bg-muted p-2.5 transition-colors flex items-center justify-center" title="Back to site">
@@ -182,10 +168,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       key={item.title}
                       href={item.href}
                       className={cn(
-                        'flex items-center gap-3 rounded-lg text-sm font-medium transition-all relative',
-                        isActive 
-                          ? 'bg-accent/10 text-accent border-l-2 border-accent pl-3 pr-4 py-3' 
-                          : 'hover:bg-muted text-muted-foreground hover:text-foreground px-4 py-3'
+                        'flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all',
+                        isActive ? 'bg-accent text-accent-foreground shadow-sm' : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                       )}
                     >
                       <item.icon className="h-5 w-5 flex-shrink-0" />
