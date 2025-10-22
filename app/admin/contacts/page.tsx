@@ -240,112 +240,59 @@ export default function ContactsPage() {
       };
 
       return (
-            <div className="space-y-4">
+            <div className="space-y-6">
+                  {/* Header */}
                   <div className="flex items-center justify-between">
-                        <h1 className="text-2xl font-bold">
-                              Contact Submissions
-                        </h1>
-                  </div>
-
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex gap-2 w-full sm:w-auto">
-                              <div className="relative flex-grow sm:w-96">
-                                    <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                                    <Input
-                                          type="search"
-                                          placeholder="Search contacts..."
-                                          className="pl-8"
-                                          value={searchQuery}
-                                          onChange={(e) =>
-                                                setSearchQuery(e.target.value)
-                                          }
-                                    />
-                              </div>
-                              <Select
-                                    value={statusFilter}
-                                    onValueChange={setStatusFilter}
-                              >
-                                    <SelectTrigger className="w-[180px]">
-                                          <SelectValue placeholder="Filter by status" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                          <SelectItem value="">
-                                                All Statuses
-                                          </SelectItem>
-                                          <SelectItem value="NEW">
-                                                New
-                                          </SelectItem>
-                                          <SelectItem value="IN_PROGRESS">
-                                                In Progress
-                                          </SelectItem>
-                                          <SelectItem value="COMPLETED">
-                                                Completed
-                                          </SelectItem>
-                                          <SelectItem value="ARCHIVED">
-                                                Archived
-                                          </SelectItem>
-                                    </SelectContent>
-                              </Select>
-                        </div>
-
-                        <div className="flex items-center gap-2 flex-wrap justify-end">
-                              {selectedContacts.length > 0 && (
-                                    <>
-                                          <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() =>
-                                                      handleBulkUpdateStatus(
-                                                            "IN_PROGRESS",
-                                                      )
-                                                }
-                                                className="whitespace-nowrap"
-                                          >
-                                                <CheckCircleIcon className="mr-1 h-4 w-4" />
-                                                Mark In Progress
-                                          </Button>
-                                          <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() =>
-                                                      handleBulkUpdateStatus(
-                                                            "COMPLETED",
-                                                      )
-                                                }
-                                                className="whitespace-nowrap"
-                                          >
-                                                <CheckCircleIcon className="mr-1 h-4 w-4" />
-                                                Mark Completed
-                                          </Button>
-                                          <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() =>
-                                                      handleBulkUpdateStatus(
-                                                            "ARCHIVED",
-                                                      )
-                                                }
-                                                className="whitespace-nowrap"
-                                          >
-                                                <ArchiveIcon className="mr-1 h-4 w-4" />
-                                                Archive
-                                          </Button>
-                                          <Button
-                                                variant="destructive"
-                                                size="sm"
-                                                onClick={handleBulkDelete}
-                                                className="whitespace-nowrap"
-                                          >
-                                                <TrashIcon className="mr-1 h-4 w-4" />
-                                                Delete (
-                                                {selectedContacts.length})
-                                          </Button>
-                                    </>
-                              )}
+                        <div>
+                              <h1 className="text-3xl font-bold tracking-tight">
+                                    Contact Submissions
+                              </h1>
+                              <p className="text-muted-foreground">
+                                    Manage and respond to contact form submissions
+                              </p>
                         </div>
                   </div>
 
-                  <div className="rounded-lg border">
+                  {/* Filters */}
+                  <div className="flex items-center gap-4">
+                        <div className="relative flex-1 max-w-sm">
+                              <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                              <Input
+                                    placeholder="Search contacts..."
+                                    value={searchQuery}
+                                    onChange={(e) =>
+                                          setSearchQuery(e.target.value)
+                                    }
+                                    className="pl-9"
+                              />
+                        </div>
+                        <Select
+                              value={statusFilter}
+                              onValueChange={setStatusFilter}
+                        >
+                              <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Filter by status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                    <SelectItem value="">
+                                          All Statuses
+                                    </SelectItem>
+                                    <SelectItem value="NEW">New</SelectItem>
+                                    <SelectItem value="IN_PROGRESS">
+                                          In Progress
+                                    </SelectItem>
+                                    <SelectItem value="COMPLETED">
+                                          Completed
+                                    </SelectItem>
+                                    <SelectItem value="ARCHIVED">
+                                          Archived
+                                    </SelectItem>
+                              </SelectContent>
+                        </Select>
+                  </div>
+
+                  {/* Contacts Table */}
+                  <div className="rounded-lg border bg-card">
                         <Table>
                               <TableHeader>
                                     <TableRow>
@@ -516,15 +463,56 @@ export default function ContactsPage() {
                                           <TableRow>
                                                 <TableCell
                                                       colSpan={7}
-                                                      className="h-24 text-center"
+                                                      className="text-center py-8 text-muted-foreground"
                                                 >
-                                                      No contacts found.
+                                                      No contacts found
                                                 </TableCell>
                                           </TableRow>
                                     )}
                               </TableBody>
                         </Table>
                   </div>
+
+                  {/* Selected Actions */}
+                  {selectedContacts.length > 0 && (
+                        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 rounded-lg border bg-card p-4 shadow-lg">
+                              <div className="flex items-center gap-4">
+                                    <span className="text-sm">
+                                          {selectedContacts.length} contact(s)
+                                          selected
+                                    </span>
+                                    <Button
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() =>
+                                                handleBulkUpdateStatus(
+                                                      "IN_PROGRESS",
+                                                )
+                                          }
+                                    >
+                                          Mark In Progress
+                                    </Button>
+                                    <Button
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() =>
+                                                handleBulkUpdateStatus(
+                                                      "COMPLETED",
+                                                )
+                                          }
+                                    >
+                                          Mark Completed
+                                    </Button>
+                                    <Button
+                                          variant="destructive"
+                                          size="sm"
+                                          onClick={handleBulkDelete}
+                                    >
+                                          Delete
+                                    </Button>
+                              </div>
+                        </div>
+                  )}
             </div>
       );
 }

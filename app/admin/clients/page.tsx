@@ -125,37 +125,32 @@ export default function ClientsPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Clients</h1>
-        <Button onClick={() => router.push('/admin/clients/new')} className="flex items-center gap-2">
-          <PlusIcon className="h-4 w-4" />
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Clients</h1>
+          <p className="text-muted-foreground">Manage your client logos and partnerships</p>
+        </div>
+        <Button onClick={() => router.push('/admin/clients/new')}>
+          <PlusIcon className="mr-2 h-4 w-4" />
           Add Client
         </Button>
       </div>
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative w-full sm:w-96">
-          <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search clients..."
-            className="pl-8"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        <div className="flex items-center gap-2">
-          {selectedClients.length > 0 && (
-            <Button variant="destructive" size="sm" onClick={handleBulkDelete}>
-              Delete Selected ({selectedClients.length})
-            </Button>
-          )}
-        </div>
+      {/* Search */}
+      <div className="relative max-w-sm">
+        <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          placeholder="Search clients..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-9"
+        />
       </div>
 
-      <div className="rounded-lg border">
+      {/* Clients Table */}
+      <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -253,14 +248,26 @@ export default function ClientsPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} className="h-24 text-center">
-                  No clients found.
+                <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                  No clients found
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+
+      {/* Selected Actions */}
+      {selectedClients.length > 0 && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 rounded-lg border bg-card p-4 shadow-lg">
+          <div className="flex items-center gap-4">
+            <span className="text-sm">{selectedClients.length} client(s) selected</span>
+            <Button variant="destructive" size="sm" onClick={handleBulkDelete}>
+              Delete
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
