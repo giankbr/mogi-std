@@ -271,22 +271,22 @@ export default function NotFound() {
                     <button
                       key={hole.id}
                       onClick={() => handleHoleClick(hole)}
-                      className={`aspect-square rounded-2xl border-2 bg-muted relative overflow-hidden transition-all ${hole.active ? 'cursor-pointer hover:scale-105' : 'cursor-default'} ${
+                      className={`aspect-square rounded-2xl border-2 bg-muted relative transition-all ${hole.active ? 'cursor-pointer hover:scale-105' : 'cursor-default'} ${
                         hitAnimation === hole.id ? 'scale-95' : ''
                       }`}
                       disabled={!hole.active}
                     >
                       {/* Hole */}
-                      <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
                         <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-background border-2 border-border" />
                       </div>
 
                       {/* Mole/Boss/Trap */}
                       {hole.active && (
-                        <div className={`absolute inset-0 flex items-center justify-center z-10 animate-in zoom-in duration-200 ${hole.type === 'trap' ? 'animate-pulse' : ''}`}>
-                          {hole.type === 'mole' && <span className="text-6xl md:text-7xl">🐹</span>}
-                          {hole.type === 'boss' && <span className="text-7xl md:text-8xl animate-bounce">👑</span>}
-                          {hole.type === 'trap' && <span className="text-6xl md:text-7xl">💣</span>}
+                        <div className={`absolute inset-0 flex items-center justify-center z-20 animate-in zoom-in duration-200 ${hole.type === 'trap' ? 'animate-pulse' : ''}`}>
+                          {hole.type === 'mole' && <span className="text-7xl md:text-8xl select-none">🐹</span>}
+                          {hole.type === 'boss' && <span className="text-8xl md:text-9xl animate-bounce select-none">👑</span>}
+                          {hole.type === 'trap' && <span className="text-7xl md:text-8xl select-none">💣</span>}
                         </div>
                       )}
                     </button>
