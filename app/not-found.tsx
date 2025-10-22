@@ -83,36 +83,53 @@ export default function NotFound() {
 
   // Spawn moles/traps/bosses
   useEffect(() => {
-    if (!gameStarted || gameOver || gameWon) return;
+    if (!gameStarted || gameOver || gameWon) {
+      console.log('Spawn disabled:', { gameStarted, gameOver, gameWon });
+      return;
+    }
+
+    console.log('Starting spawn interval...');
 
     const spawnInterval = setInterval(() => {
-      const emptyHoles = holes.filter((h) => !h.active);
-      if (emptyHoles.length === 0) return;
+      setHoles((prev) => {
+        const emptyHoles = prev.filter((h) => !h.active);
+        console.log('Empty holes:', emptyHoles.length, 'out of', prev.length);
 
-      // Pick random empty hole
-      const randomHole = emptyHoles[Math.floor(Math.random() * emptyHoles.length)];
-      const rand = Math.random();
+        if (emptyHoles.length === 0) return prev;
 
-      let type: 'mole' | 'boss' | 'trap';
-      if (rand < currentLevelData.trapChance) {
-        type = 'trap';
-      } else if (rand < currentLevelData.trapChance + currentLevelData.bossChance) {
-        type = 'boss';
-      } else {
-        type = 'mole';
-      }
+        // Pick random empty hole
+        const randomHole = emptyHoles[Math.floor(Math.random() * emptyHoles.length)];
+        const rand = Math.random();
 
-      // Activate hole
-      setHoles((prev) => prev.map((h) => (h.id === randomHole.id ? { ...h, active: true, type } : h)));
+        let type: 'mole' | 'boss' | 'trap';
+        if (rand < currentLevelData.trapChance) {
+          type = 'trap';
+        } else if (rand < currentLevelData.trapChance + currentLevelData.bossChance) {
+          type = 'boss';
+        } else {
+          type = 'mole';
+        }
 
-      // Auto-hide after moleSpeed
-      setTimeout(() => {
-        setHoles((prev) => prev.map((h) => (h.id === randomHole.id ? { ...h, active: false, type: null } : h)));
-      }, currentLevelData.moleSpeed);
+        console.log(`Spawning ${type} at hole ${randomHole.id}`);
+
+        // Activate hole
+        const newHoles = prev.map((h) => (h.id === randomHole.id ? { ...h, active: true, type } : h));
+
+        // Auto-hide after moleSpeed
+        setTimeout(() => {
+          console.log(`Hiding ${type} at hole ${randomHole.id}`);
+          setHoles((prevHoles) => prevHoles.map((h) => (h.id === randomHole.id ? { ...h, active: false, type: null } : h)));
+        }, currentLevelData.moleSpeed);
+
+        return newHoles;
+      });
     }, 600);
 
-    return () => clearInterval(spawnInterval);
-  }, [gameStarted, holes, gameOver, gameWon, currentLevelData]);
+    return () => {
+      console.log('Clearing spawn interval');
+      clearInterval(spawnInterval);
+    };
+  }, [gameStarted, gameOver, gameWon, currentLevelData]);
 
   const handleHoleClick = (hole: Hole) => {
     if (!hole.active || !gameStarted) return;
@@ -254,9 +271,9 @@ export default function NotFound() {
                     <button
                       key={hole.id}
                       onClick={() => handleHoleClick(hole)}
-                      className={`aspect-square rounded-2xl border-2 bg-muted relative overflow-hidden transition-all ${
-                        hole.active ? 'cursor-pointer hover:scale-105' : 'cursor-default'
-                      } ${hitAnimation === hole.id ? 'scale-95' : ''}`}
+                      className={`aspect-square rounded-2xl border-2 bg-muted relative overflow-hidden transition-all ${hole.active ? 'cursor-pointer hover:scale-105' : 'cursor-default'} ${
+                        hitAnimation === hole.id ? 'scale-95' : ''
+                      }`}
                       disabled={!hole.active}
                     >
                       {/* Hole */}
@@ -266,11 +283,7 @@ export default function NotFound() {
 
                       {/* Mole/Boss/Trap */}
                       {hole.active && (
-                        <div
-                          className={`absolute inset-0 flex items-center justify-center z-10 animate-in zoom-in duration-200 ${
-                            hole.type === 'trap' ? 'animate-pulse' : ''
-                          }`}
-                        >
+                        <div className={`absolute inset-0 flex items-center justify-center z-10 animate-in zoom-in duration-200 ${hole.type === 'trap' ? 'animate-pulse' : ''}`}>
                           {hole.type === 'mole' && <span className="text-6xl md:text-7xl">🐹</span>}
                           {hole.type === 'boss' && <span className="text-7xl md:text-8xl animate-bounce">👑</span>}
                           {hole.type === 'trap' && <span className="text-6xl md:text-7xl">💣</span>}
@@ -282,9 +295,7 @@ export default function NotFound() {
 
                 {/* Combo Animation */}
                 {showCombo && combo > 1 && (
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl font-bold text-accent animate-in zoom-in duration-300 pointer-events-none">
-                    +{combo}
-                  </div>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl font-bold text-accent animate-in zoom-in duration-300 pointer-events-none">+{combo}</div>
                 )}
               </div>
             )}
@@ -308,9 +319,7 @@ export default function NotFound() {
                   <span className="font-semibold">Time's Up!</span>
                 </div>
                 <p className="text-muted-foreground mb-2">Final Score: {score}</p>
-                <p className="text-sm text-muted-foreground">
-                  {score >= currentLevelData.targetScore ? 'So close! Try again?' : 'Keep practicing!'}
-                </p>
+                <p className="text-sm text-muted-foreground">{score >= currentLevelData.targetScore ? 'So close! Try again?' : 'Keep practicing!'}</p>
               </div>
             )}
           </div>
