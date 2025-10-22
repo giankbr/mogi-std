@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ArrowLeft, Home, RotateCcw, Trophy, Zap } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Ball {
   x: number;
@@ -77,20 +77,21 @@ const levels: Level[] = [
 
 export default function NotFound() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Particle[]>([]);
+  const netAnimRef = useRef(0);
+  const ballRef = useRef<Ball>({ x: 200, y: 450, vx: 0, vy: 0, radius: 14, isFlying: false, rotation: 0 });
+  const obstaclesRef = useRef<Obstacle[]>(levels[0].obstacles.map((o) => ({ ...o })));
+
   const [currentLevel, setCurrentLevel] = useState(0);
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(5);
   const [gameWon, setGameWon] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [showTutorial, setShowTutorial] = useState(true);
-  const [ball, setBall] = useState<Ball>({ x: 200, y: 450, vx: 0, vy: 0, radius: 14, isFlying: false, rotation: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [obstacles, setObstacles] = useState<Obstacle[]>(levels[0].obstacles.map((o) => ({ ...o })));
-  const [particles, setParticles] = useState<Particle[]>([]);
-  const [lastScore, setLastScore] = useState(0);
   const [showScoreAnimation, setShowScoreAnimation] = useState(false);
-  const [netAnimation, setNetAnimation] = useState(0);
+  const [forceRender, setForceRender] = useState(0);
 
   const canvasWidth = 400;
   const canvasHeight = 500;
@@ -225,6 +226,46 @@ export default function NotFound() {
     ctx.fillText('POWER', 60, canvasHeight - 35);
   };
 
+  const addParticles = useCallback((particles: Particle[]) => {
+    particlesRef.current = [...particlesRef.current, ...particles];
+  }, []);
+
+  const createScoreParticles = useCallback(
+    (x: number, y: number) => {
+      const newParticles: Particle[] = [];
+      for (let i = 0; i < 30; i++) {
+        newParticles.push({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          life: 50,
+          color: ['#10b981', '#fbbf24', '#3b82f6'][Math.floor(Math.random() * 3)],
+        });
+      }
+      addParticles(newParticles);
+    },
+    [addParticles]
+  );
+
+  const createMissParticles = useCallback(
+    (x: number, y: number) => {
+      const newParticles: Particle[] = [];
+      for (let i = 0; i < 10; i++) {
+        newParticles.push({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 5,
+          vy: (Math.random() - 0.5) * 5,
+          life: 30,
+          color: '#ef4444',
+        });
+      }
+      addParticles(newParticles);
+    },
+    [addParticles]
+  );
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -235,186 +276,137 @@ export default function NotFound() {
     let animationId: number;
 
     const animate = () => {
-      // Draw court background
-      drawCourt(ctx);
+      try {
+        // Draw court background
+        drawCourt(ctx);
 
-      const currentLevelData = levels[currentLevel];
-      const basketY = currentLevelData.basketY;
+        const currentLevelData = levels[currentLevel];
+        const basketY = currentLevelData.basketY;
 
-      // Draw basket with net
-      drawBasket(ctx, basketX, basketY, basketWidth, netAnimation);
-      setNetAnimation((prev) => prev + 0.1);
+        // Draw basket with net
+        netAnimRef.current += 0.1;
+        drawBasket(ctx, basketX, basketY, basketWidth, netAnimRef.current);
 
-      // Update and draw moving obstacles
-      obstacles.forEach((obstacle) => {
-        if (obstacle.moving) {
-          obstacle.x += obstacle.direction! * obstacle.speed!;
-          if (obstacle.x <= 0 || obstacle.x + obstacle.width >= canvasWidth) {
-            obstacle.direction! *= -1;
+        // Update and draw obstacles
+        obstaclesRef.current.forEach((obstacle) => {
+          if (obstacle.moving) {
+            obstacle.x += obstacle.direction! * obstacle.speed!;
+            if (obstacle.x <= 0 || obstacle.x + obstacle.width >= canvasWidth) {
+              obstacle.direction! *= -1;
+            }
           }
-        }
 
-        // Draw obstacle with 3D effect
-        ctx.fillStyle = '#475569';
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-        ctx.fillStyle = '#334155';
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height / 2);
-        ctx.strokeStyle = '#64748b';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+          // Draw obstacle with 3D effect
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+          ctx.fillStyle = '#334155';
+          ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height / 2);
+          ctx.strokeStyle = '#64748b';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
 
-        // Moving indicator
-        if (obstacle.moving) {
-          ctx.fillStyle = '#fbbf24';
-          ctx.beginPath();
-          ctx.arc(obstacle.x + obstacle.width / 2, obstacle.y - 8, 3, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      });
+          // Moving indicator
+          if (obstacle.moving) {
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(obstacle.x + obstacle.width / 2, obstacle.y - 8, 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
 
-      // Update ball physics
-      if (ball.isFlying) {
-        const newBall = { ...ball };
-        newBall.vy += 0.4; // gravity
-        newBall.x += newBall.vx;
-        newBall.y += newBall.vy;
-        newBall.rotation += 0.1;
+        // Update ball physics
+        const ball = ballRef.current;
+        if (ball.isFlying) {
+          ball.vy += 0.4; // gravity
+          ball.x += ball.vx;
+          ball.y += ball.vy;
+          ball.rotation += 0.1;
 
-        // Ball trail effect
-        if (Math.random() > 0.7) {
-          setParticles((prev) => [
-            ...prev,
-            {
-              x: newBall.x,
-              y: newBall.y,
+          // Ball trail effect
+          if (Math.random() > 0.7) {
+            particlesRef.current.push({
+              x: ball.x,
+              y: ball.y,
               vx: (Math.random() - 0.5) * 2,
               vy: (Math.random() - 0.5) * 2,
               life: 20,
               color: '#ff9f5f',
-            },
-          ]);
-        }
+            });
+          }
 
-        // Check collision with obstacles
-        let hitObstacle = false;
-        obstacles.forEach((obstacle) => {
-          if (
-            newBall.x + newBall.radius > obstacle.x &&
-            newBall.x - newBall.radius < obstacle.x + obstacle.width &&
-            newBall.y + newBall.radius > obstacle.y &&
-            newBall.y - newBall.radius < obstacle.y + obstacle.height
-          ) {
-            hitObstacle = true;
-            // Miss effect
-            for (let i = 0; i < 10; i++) {
-              setParticles((prev) => [
-                ...prev,
-                {
-                  x: newBall.x,
-                  y: newBall.y,
-                  vx: (Math.random() - 0.5) * 5,
-                  vy: (Math.random() - 0.5) * 5,
-                  life: 30,
-                  color: '#ef4444',
-                },
-              ]);
+          // Check collision with obstacles
+          let hitObstacle = false;
+          obstaclesRef.current.forEach((obstacle) => {
+            if (ball.x + ball.radius > obstacle.x && ball.x - ball.radius < obstacle.x + obstacle.width && ball.y + ball.radius > obstacle.y && ball.y - ball.radius < obstacle.y + obstacle.height) {
+              hitObstacle = true;
+              createMissParticles(ball.x, ball.y);
             }
-          }
-        });
+          });
 
-        // Check if ball scored
-        if (
-          !hitObstacle &&
-          newBall.x > basketX &&
-          newBall.x < basketX + basketWidth &&
-          newBall.y > basketY - 5 &&
-          newBall.y < basketY + basketHeight + 5 &&
-          newBall.vy > 0
-        ) {
-          setScore((s) => s + 1);
-          setLastScore((s) => s + 1);
-          setShowScoreAnimation(true);
-          setTimeout(() => setShowScoreAnimation(false), 1000);
+          // Check if ball scored
+          if (!hitObstacle && ball.x > basketX && ball.x < basketX + basketWidth && ball.y > basketY - 5 && ball.y < basketY + basketHeight + 5 && ball.vy > 0) {
+            setScore((s) => s + 1);
+            setShowScoreAnimation(true);
+            setTimeout(() => setShowScoreAnimation(false), 1000);
+            createScoreParticles(basketX + basketWidth / 2, basketY);
 
-          // Score celebration particles
-          for (let i = 0; i < 30; i++) {
-            setParticles((prev) => [
-              ...prev,
-              {
-                x: basketX + basketWidth / 2,
-                y: basketY,
-                vx: (Math.random() - 0.5) * 8,
-                vy: (Math.random() - 0.5) * 8,
-                life: 50,
-                color: ['#10b981', '#fbbf24', '#3b82f6'][Math.floor(Math.random() * 3)],
-              },
-            ]);
+            ball.isFlying = false;
+            ball.x = 200;
+            ball.y = 450;
+            ball.vx = 0;
+            ball.vy = 0;
+            ball.rotation = 0;
           }
 
-          newBall.isFlying = false;
-          newBall.x = 200;
-          newBall.y = 450;
-          newBall.vx = 0;
-          newBall.vy = 0;
-          newBall.rotation = 0;
-        }
-
-        // Check if ball is out of bounds
-        if (newBall.y > canvasHeight + 50 || hitObstacle || newBall.x < -50 || newBall.x > canvasWidth + 50) {
-          newBall.isFlying = false;
-          newBall.x = 200;
-          newBall.y = 450;
-          newBall.vx = 0;
-          newBall.vy = 0;
-          newBall.rotation = 0;
-          if (!hitObstacle || newBall.y > canvasHeight + 50) {
-            setAttempts((a) => a - 1);
-          } else {
-            setAttempts((a) => a - 1);
+          // Check if ball is out of bounds
+          if (ball.y > canvasHeight + 50 || hitObstacle || ball.x < -50 || ball.x > canvasWidth + 50) {
+            ball.isFlying = false;
+            ball.x = 200;
+            ball.y = 450;
+            ball.vx = 0;
+            ball.vy = 0;
+            ball.rotation = 0;
+            setAttempts((a) => Math.max(0, a - 1));
           }
         }
 
-        setBall(newBall);
-      }
+        // Draw ball
+        drawBasketball(ctx, ball.x, ball.y, ball.radius, ball.rotation);
 
-      // Draw ball
-      drawBasketball(ctx, ball.x, ball.y, ball.radius, ball.rotation);
+        // Draw trajectory preview when dragging
+        if (isDragging && !ball.isFlying) {
+          const distance = Math.hypot(dragStart.x - ball.x, dragStart.y - ball.y);
+          const power = Math.min(distance, 150);
 
-      // Draw trajectory preview when dragging
-      if (isDragging && !ball.isFlying) {
-        const distance = Math.hypot(dragStart.x - ball.x, dragStart.y - ball.y);
-        const power = Math.min(distance, 150);
+          // Draw power meter
+          drawPowerMeter(ctx, power);
 
-        // Draw power meter
-        drawPowerMeter(ctx, power);
+          // Trajectory line
+          ctx.beginPath();
+          ctx.setLineDash([8, 8]);
+          ctx.moveTo(ball.x, ball.y);
+          const angle = Math.atan2(dragStart.y - ball.y, dragStart.x - ball.x);
+          const previewLength = power * 1.5;
+          ctx.lineTo(ball.x - Math.cos(angle) * previewLength, ball.y - Math.sin(angle) * previewLength);
+          ctx.strokeStyle = '#fbbf24';
+          ctx.lineWidth = 3;
+          ctx.stroke();
+          ctx.setLineDash([]);
 
-        // Trajectory line
-        ctx.beginPath();
-        ctx.setLineDash([8, 8]);
-        ctx.moveTo(ball.x, ball.y);
-        const angle = Math.atan2(dragStart.y - ball.y, dragStart.x - ball.x);
-        const previewLength = power * 1.5;
-        ctx.lineTo(ball.x - Math.cos(angle) * previewLength, ball.y - Math.sin(angle) * previewLength);
-        ctx.strokeStyle = '#fbbf24';
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        ctx.setLineDash([]);
+          // Target indicator
+          const targetX = ball.x - Math.cos(angle) * previewLength;
+          const targetY = ball.y - Math.sin(angle) * previewLength;
+          ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
+          ctx.beginPath();
+          ctx.arc(targetX, targetY, 20, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#fbbf24';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
 
-        // Target indicator
-        const targetX = ball.x - Math.cos(angle) * previewLength;
-        const targetY = ball.y - Math.sin(angle) * previewLength;
-        ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
-        ctx.beginPath();
-        ctx.arc(targetX, targetY, 20, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = '#fbbf24';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-
-      // Update and draw particles
-      setParticles((prev) =>
-        prev
+        // Update and draw particles
+        particlesRef.current = particlesRef.current
           .map((p) => ({
             ...p,
             x: p.x + p.vx,
@@ -422,52 +414,57 @@ export default function NotFound() {
             life: p.life - 1,
             vy: p.vy + 0.2,
           }))
-          .filter((p) => p.life > 0)
-      );
+          .filter((p) => p.life > 0);
 
-      particles.forEach((p) => {
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.life / 50;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      });
+        particlesRef.current.forEach((p) => {
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.life / 50;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        });
 
-      // Score animation
-      if (showScoreAnimation) {
-        ctx.fillStyle = '#10b981';
-        ctx.font = 'bold 40px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.shadowColor = '#10b981';
-        ctx.shadowBlur = 20;
-        ctx.fillText('+1', canvasWidth / 2, canvasHeight / 2);
-        ctx.shadowBlur = 0;
+        // Score animation
+        if (showScoreAnimation) {
+          ctx.fillStyle = '#10b981';
+          ctx.font = 'bold 40px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.shadowColor = '#10b981';
+          ctx.shadowBlur = 20;
+          ctx.fillText('+1', canvasWidth / 2, canvasHeight / 2);
+          ctx.shadowBlur = 0;
+        }
+
+        animationId = requestAnimationFrame(animate);
+      } catch (error) {
+        console.error('Animation error:', error);
+        cancelAnimationFrame(animationId);
       }
-
-      animationId = requestAnimationFrame(animate);
     };
 
     animate();
 
-    return () => cancelAnimationFrame(animationId);
-  }, [ball, isDragging, dragStart, obstacles, currentLevel, particles, showScoreAnimation, netAnimation]);
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, [currentLevel, isDragging, dragStart, showScoreAnimation, createScoreParticles, createMissParticles]);
 
   // Check level completion
   useEffect(() => {
     const currentLevelData = levels[currentLevel];
     if (score >= currentLevelData.requiredScore) {
       if (currentLevel < levels.length - 1) {
-        // Next level
         setTimeout(() => {
           setCurrentLevel((l) => l + 1);
           setScore(0);
           setAttempts(5);
-          setObstacles(levels[currentLevel + 1].obstacles.map((o) => ({ ...o })));
-          setBall({ x: 200, y: 450, vx: 0, vy: 0, radius: 14, isFlying: false, rotation: 0 });
+          obstaclesRef.current = levels[currentLevel + 1].obstacles.map((o) => ({ ...o }));
+          ballRef.current = { x: 200, y: 450, vx: 0, vy: 0, radius: 14, isFlying: false, rotation: 0 };
         }, 800);
       } else {
-        // Game won!
         setGameWon(true);
       }
     }
@@ -475,13 +472,13 @@ export default function NotFound() {
 
   // Check game over
   useEffect(() => {
-    if (attempts <= 0 && !ball.isFlying) {
+    if (attempts <= 0 && !ballRef.current.isFlying) {
       setGameOver(true);
     }
-  }, [attempts, ball.isFlying]);
+  }, [attempts]);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (ball.isFlying || gameWon || gameOver) return;
+    if (ballRef.current.isFlying || gameWon || gameOver) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -491,8 +488,8 @@ export default function NotFound() {
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
 
-    const distance = Math.hypot(x - ball.x, y - ball.y);
-    if (distance <= ball.radius * 3) {
+    const distance = Math.hypot(x - ballRef.current.x, y - ballRef.current.y);
+    if (distance <= ballRef.current.radius * 3) {
       setIsDragging(true);
       setDragStart({ x, y });
       setShowTutorial(false);
@@ -513,18 +510,15 @@ export default function NotFound() {
   };
 
   const handleMouseUp = () => {
-    if (!isDragging || ball.isFlying) return;
+    if (!isDragging || ballRef.current.isFlying) return;
 
-    const distance = Math.hypot(dragStart.x - ball.x, dragStart.y - ball.y);
+    const distance = Math.hypot(dragStart.x - ballRef.current.x, dragStart.y - ballRef.current.y);
     const power = Math.min(distance, 150) / 15;
-    const angle = Math.atan2(dragStart.y - ball.y, dragStart.x - ball.x);
+    const angle = Math.atan2(dragStart.y - ballRef.current.y, dragStart.x - ballRef.current.x);
 
-    setBall({
-      ...ball,
-      vx: -Math.cos(angle) * power,
-      vy: -Math.sin(angle) * power,
-      isFlying: true,
-    });
+    ballRef.current.vx = -Math.cos(angle) * power;
+    ballRef.current.vy = -Math.sin(angle) * power;
+    ballRef.current.isFlying = true;
 
     setIsDragging(false);
   };
@@ -536,9 +530,9 @@ export default function NotFound() {
     setGameWon(false);
     setGameOver(false);
     setShowTutorial(true);
-    setBall({ x: 200, y: 450, vx: 0, vy: 0, radius: 14, isFlying: false, rotation: 0 });
-    setObstacles(levels[0].obstacles.map((o) => ({ ...o })));
-    setParticles([]);
+    ballRef.current = { x: 200, y: 450, vx: 0, vy: 0, radius: 14, isFlying: false, rotation: 0 };
+    obstaclesRef.current = levels[0].obstacles.map((o) => ({ ...o }));
+    particlesRef.current = [];
   };
 
   return (
@@ -547,9 +541,7 @@ export default function NotFound() {
         {/* Header */}
         <div className="text-center mb-6">
           <div className="inline-block">
-            <h1 className="text-7xl md:text-8xl font-serif font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent mb-2">
-              404
-            </h1>
+            <h1 className="text-7xl md:text-8xl font-serif font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent mb-2">404</h1>
             <div className="h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent" />
           </div>
           <p className="text-xl md:text-2xl font-medium mt-4 mb-1 text-white">Page Not Found</p>
