@@ -165,22 +165,28 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             )}
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div className="rounded-xl border bg-card p-6">
-              <p className="text-sm text-muted-foreground mb-2">Client</p>
-              <p className="font-semibold">{project.client}</p>
+          {/* Bento Grid for Metadata */}
+          <div className="grid gap-4 grid-cols-4 sm:grid-cols-6 auto-rows-[minmax(120px,auto)]">
+            {/* Client - Takes 2 columns on mobile, 2 on desktop */}
+            <div className="col-span-2 row-span-1 rounded-2xl border bg-gradient-to-br from-card to-card/50 p-6 flex flex-col justify-between hover:border-accent/50 transition-all">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Client</p>
+              <p className="text-xl font-semibold">{project.client}</p>
             </div>
-            <div className="rounded-xl border bg-card p-6">
-              <p className="text-sm text-muted-foreground mb-2">Year</p>
-              <p className="font-semibold">{project.year}</p>
+            
+            {/* Year - Takes 2 columns on mobile, 2 on desktop */}
+            <div className="col-span-2 row-span-1 rounded-2xl border bg-gradient-to-br from-card to-card/50 p-6 flex flex-col justify-between hover:border-accent/50 transition-all">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Year</p>
+              <p className="text-xl font-semibold">{project.year}</p>
             </div>
-            <div className="rounded-xl border bg-card p-6 sm:col-span-2">
-              <p className="text-sm text-muted-foreground mb-2">Services</p>
-              <div className="flex flex-wrap gap-2">
+
+            {/* Services - Takes full width on mobile (4 cols), 2 cols on tablet/desktop, spans 2 rows */}
+            <div className="col-span-4 sm:col-span-2 row-span-2 rounded-2xl border bg-gradient-to-br from-accent/5 to-accent/10 p-6 flex flex-col hover:border-accent/50 transition-all">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">Services</p>
+              <div className="flex flex-col gap-2 flex-1">
                 {project.services.map((service) => (
-                  <span key={service} className="text-sm font-medium bg-accent/10 text-accent px-3 py-1 rounded-full">
+                  <div key={service} className="text-sm font-medium bg-background/80 backdrop-blur-sm text-foreground px-4 py-2.5 rounded-lg border border-accent/20">
                     {service}
-                  </span>
+                  </div>
                 ))}
               </div>
             </div>

@@ -11,31 +11,20 @@ import { useEffect, useState } from 'react';
 export function Navbar({ className }: { className?: string }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const { t } = useLanguage();
 
-  // Scroll detection for navbar hide/show
+  // Scroll detection for navbar styling
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Set scrolled state for styling
+      // Set scrolled state for backdrop blur effect
       setScrolled(currentScrollY > 10);
-      
-      // Hide navbar on scroll down, show on scroll up
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setHidden(true);
-      } else {
-        setHidden(false);
-      }
-      
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   // Prevent scroll when menu is open
   useEffect(() => {
@@ -62,7 +51,6 @@ export function Navbar({ className }: { className?: string }) {
         className={cn(
           'sticky top-0 z-50 backdrop-blur-md border-b shadow-sm transition-all duration-300',
           scrolled ? 'supports-[backdrop-filter]:bg-background/90' : 'supports-[backdrop-filter]:bg-background/80',
-          hidden ? '-translate-y-full' : 'translate-y-0',
           className
         )}
       >

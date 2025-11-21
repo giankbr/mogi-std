@@ -45,15 +45,16 @@ export default function Page() {
   };
 
   return (
-    <main className="overflow-x-hidden">
+    <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-
+      
       <Navbar />
 
-      {/* Hero Section */}
-      <MotionSection delay={0.0}>
-        <Hero />
-      </MotionSection>
+      <main className="overflow-x-hidden">
+        {/* Hero Section */}
+        <MotionSection delay={0.0}>
+          <Hero />
+        </MotionSection>
 
       {/* Clients Marquee */}
       <MotionSection delay={0.05}>
@@ -143,5 +144,6 @@ export default function Page() {
       {/* Footer */}
       <Footer />
     </main>
+    </>
   );
 }
