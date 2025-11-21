@@ -60,7 +60,34 @@ const socialLinks = [
   },
 ];
 
-export function SocialLinks({ className, iconClassName }: { className?: string; iconClassName?: string }) {
+export function SocialLinks({ 
+  className, 
+  iconClassName,
+  variant = 'default' 
+}: { 
+  className?: string; 
+  iconClassName?: string;
+  variant?: 'default' | 'footer';
+}) {
+  if (variant === 'footer') {
+    return (
+      <ul className={cn('space-y-3 text-sm', className)}>
+        {socialLinks.map((link) => (
+          <li key={link.name}>
+            <a 
+              href={link.href} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-muted-foreground hover:text-accent transition-colors"
+            >
+              {link.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
   return (
     <div className={cn('flex items-center gap-4', className)}>
       {socialLinks.map((link) => (
