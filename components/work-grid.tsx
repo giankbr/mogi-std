@@ -101,8 +101,8 @@ export function WorkGrid({ className }: { className?: string }) {
               key={i}
               onClick={() => scrollTo(i)}
               className={cn(
-                'h-1.5 w-8 rounded-full transition-all',
-                selectedIndex === i ? 'bg-accent w-12' : 'bg-muted hover:bg-muted-foreground/30'
+                'h-1.5 w-6 sm:w-8 rounded-full transition-all',
+                selectedIndex === i ? 'bg-accent w-12 sm:w-12' : 'bg-muted hover:bg-muted-foreground/30'
               )}
               aria-label={`Go to slide ${i + 1}`}
             />
