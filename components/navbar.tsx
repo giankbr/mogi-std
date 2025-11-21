@@ -10,7 +10,32 @@ import { useEffect, useState } from 'react';
 
 export function Navbar({ className }: { className?: string }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const { t } = useLanguage();
+
+  // Scroll detection for navbar hide/show
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Set scrolled state for styling
+      setScrolled(currentScrollY > 10);
+      
+      // Hide navbar on scroll down, show on scroll up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   // Prevent scroll when menu is open
   useEffect(() => {
@@ -33,7 +58,14 @@ export function Navbar({ className }: { className?: string }) {
 
   return (
     <>
-      <header className={cn('sticky top-0 z-50 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 border-b shadow-sm', className)}>
+      <header 
+        className={cn(
+          'sticky top-0 z-50 backdrop-blur-md border-b shadow-sm transition-all duration-300',
+          scrolled ? 'supports-[backdrop-filter]:bg-background/90' : 'supports-[backdrop-filter]:bg-background/80',
+          hidden ? '-translate-y-full' : 'translate-y-0',
+          className
+        )}
+      >
         <div className="mx-auto max-w-6xl px-4 py-4 md:py-5 flex items-center justify-between">
           <Link href="/" className="font-serif font-bold tracking-tight text-xl md:text-2xl relative z-50 hover:text-accent transition-colors">
             Mogi Studio

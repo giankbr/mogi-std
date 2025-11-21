@@ -104,8 +104,18 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Smooth transitions for interactive elements */
+  a, button {
+    @apply transition-colors duration-200;
   }
 }
 
