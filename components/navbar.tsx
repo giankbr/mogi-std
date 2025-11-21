@@ -2,6 +2,7 @@
 
 import { LanguageToggle } from '@/components/language-toggle';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/lib/language-context';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -67,12 +68,11 @@ export function Navbar({ className }: { className?: string }) {
                 <ThemeToggle />
               </li>
               <li>
-                <Link
-                  href="#contact"
-                  className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground hover:bg-accent/90 transition-all hover:scale-105"
-                >
-                  {t('nav.getInTouch')}
-                </Link>
+                <Button asChild size="sm" className="rounded-full">
+                  <Link href="#contact">
+                    {t('nav.getInTouch')}
+                  </Link>
+                </Button>
               </li>
             </ul>
           </nav>
@@ -133,14 +133,12 @@ export function Navbar({ className }: { className?: string }) {
 
             {/* CTA Button */}
             <div className={cn('mt-6 transform transition-all duration-500 delay-300', mobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0')}>
-              <Link
-                href="#contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2 w-full rounded-full bg-accent px-6 py-4 text-base font-medium text-accent-foreground hover:bg-accent/90 transition-colors"
-              >
-                {t('nav.startProject')}
-                <span>→</span>
-              </Link>
+              <Button asChild size="lg" className="w-full rounded-full">
+                <Link href="#contact" onClick={() => setMobileMenuOpen(false)}>
+                  {t('nav.startProject')}
+                  <span>→</span>
+                </Link>
+              </Button>
             </div>
 
             {/* Bottom Safe Area */}

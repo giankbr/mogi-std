@@ -14,7 +14,7 @@
   --primary-foreground: oklch(0.98 0 0); /* white-ish */
 
   --accent: oklch(0.75 0.14 45); /* warm orange */
-  --accent-foreground: oklch(0.15 0 0); /* dark text on orange */
+  --accent-foreground: oklch(0.98 0 0); /* white text on orange for better contrast */
 
   --muted: oklch(0.95 0 0); /* soft gray surface */
   --muted-foreground: oklch(0.45 0 0); /* medium gray text */
@@ -46,7 +46,7 @@
   --primary-foreground: oklch(0.16 0 0);
 
   --accent: oklch(0.7 0.16 45);
-  --accent-foreground: oklch(0.16 0 0);
+  --accent-foreground: oklch(0.98 0 0);
 
   --muted: oklch(0.24 0 0);
   --muted-foreground: oklch(0.7 0 0);
@@ -66,7 +66,7 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-urbanist); /* bind Urbanist to font-sans */
+  --font-sans: var(--font-mona-sans); /* bind Mona Sans to font-sans */
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-bricolage); /* bind Bricolage Grotesque to font-serif for headings */
 

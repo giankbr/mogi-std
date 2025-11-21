@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/lib/language-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -90,6 +91,15 @@ export function ContactForm({ className }: { className?: string }) {
         {/* Left Column - Info */}
         <div className="space-y-8 md:space-y-10">
           <div>
+            {/* Urgency Badge */}
+            <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-3 py-1.5 rounded-full text-xs font-semibold mb-4">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+              </span>
+              Limited availability — Only 3 slots left for December
+            </div>
+            
             <h2 id="contact-title" className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
               {t('contact.title')} <span className="text-accent">{t('contact.titleAccent')}</span>
             </h2>
@@ -242,13 +252,14 @@ export function ContactForm({ className }: { className?: string }) {
 
             {submitStatus === 'error' && <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-500">{t('contact.errorMessage')}</div>}
 
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              size="lg"
+              className="w-full rounded-full"
             >
               {isSubmitting ? t('contact.sending') : t('contact.sendMessage')}
-            </button>
+            </Button>
 
             <p className="text-xs text-center text-muted-foreground">{t('contact.privacyPolicy')}</p>
           </form>

@@ -3,7 +3,8 @@ import { LanguageProvider } from '@/lib/language-context';
 import { Analytics } from '@vercel/analytics/next';
 import { GeistMono } from 'geist/font/mono';
 import type { Metadata } from 'next';
-import { Bricolage_Grotesque, Urbanist } from 'next/font/google';
+import { Bricolage_Grotesque } from 'next/font/google';
+import localFont from 'next/font/local';
 import type React from 'react';
 import { Suspense } from 'react';
 import './globals.css';
@@ -66,9 +67,9 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 };
 
-const urbanist = Urbanist({
-  subsets: ['latin'],
-  variable: '--font-urbanist',
+const monaSans = localFont({
+  src: '../node_modules/mona-sans/Mona-Sans.woff2',
+  variable: '--font-mona-sans',
   display: 'swap',
 });
 
@@ -84,7 +85,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${urbanist.variable} ${bricolageGrotesque.variable} ${GeistMono.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${monaSans.variable} ${bricolageGrotesque.variable} ${GeistMono.variable} antialiased`}>
       <head>
         <script
           dangerouslySetInnerHTML={{
