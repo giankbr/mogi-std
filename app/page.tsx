@@ -4,11 +4,11 @@ import { ClientsRow } from '@/components/clients-row';
 import { ContactForm } from '@/components/contact-form';
 import { FAQ } from '@/components/faq';
 import { FeatureCards } from '@/components/feature-cards';
+import { Footer } from '@/components/footer';
 import { Hero } from '@/components/hero';
 import { MotionSection } from '@/components/motion-section';
 import { Navbar } from '@/components/navbar';
 import { ServicesAccordion } from '@/components/services-accordion';
-import { SocialLinks } from '@/components/social-links';
 import { StatsRow } from '@/components/stats-row';
 import { Testimonials } from '@/components/testimonials';
 import { Button } from '@/components/ui/button';
@@ -141,40 +141,7 @@ export default function Page() {
       </MotionSection>
 
       {/* Footer */}
-      <footer className="border-t bg-muted/30">
-        <div className="mx-auto max-w-6xl px-4 py-10 md:py-12">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">
-                © {new Date().getFullYear()} {t('footer.copyright')}
-              </p>
-              <p className="text-sm text-muted-foreground">{t('footer.tagline')}</p>
-            </div>
-
-            <nav aria-label="Footer" className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start sm:items-center">
-              <ul className="flex items-center gap-8 text-sm">
-                <li>
-                  <a href="#work" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t('footer.work')}
-                  </a>
-                </li>
-                <li>
-                  <a href="#services" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t('footer.services')}
-                  </a>
-                </li>
-                <li>
-                  <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t('footer.contact')}
-                  </a>
-                </li>
-              </ul>
-
-              <SocialLinks />
-            </nav>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }
